@@ -1,4 +1,4 @@
-### htd29
+# HTD29
 
 ### This is a git repo for sharing files among fellow HTD29 trainees.
 
