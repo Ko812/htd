@@ -107,7 +107,7 @@ public class CarModel {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			String s = "select user_name from customer_database where customer_id=?";
 			pstmt = con.prepareStatement(s);
@@ -127,7 +127,7 @@ public class CarModel {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			String username = getCustomerUsername(this.user_id);
 			
@@ -165,7 +165,7 @@ public class CarModel {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			
 			String s = "update customer_car_db set model=?, type=?, reg_num=? where customer_id=? AND reg_num=?";
@@ -190,7 +190,7 @@ public class CarModel {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			String q = "select service_status from customer_car_db where customer_id=? AND reg_num=?";
 			pstmt = con.prepareStatement(q);
@@ -223,7 +223,7 @@ public class CarModel {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			String s = "update customer_car_db set service_status=? where customer_id=? AND reg_num=?";
 			pstmt = con.prepareStatement(s);
@@ -243,7 +243,7 @@ public class CarModel {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			
 			String s = "select * from customer_car_db where customer_id=?";
@@ -274,7 +274,7 @@ public class CarModel {
 		try {
 			if(conStat == null || conStat.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				conStat = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				conStat = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			
 			String s = "select * from customer_car_db where service_request<>? AND service_status<>?";
@@ -308,7 +308,7 @@ public class CarModel {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			
 			String s = "delete from customer_car_db where customer_id=? AND reg_num=?";
