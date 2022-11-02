@@ -58,7 +58,7 @@ public class CustomerModel {
 		try {
 			DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
 			
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			
 			String v = "select * from customer_db where cun=?";
 			pstmt = con.prepareStatement(v);
