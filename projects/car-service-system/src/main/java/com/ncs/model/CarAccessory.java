@@ -83,7 +83,7 @@ public class CarAccessory {
 				try {
 					if(con == null || con.isClosed()) {
 						DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-						con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+						con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 					}
 					pstmt = con.prepareStatement(s);
 					pstmt.setString(1, acc.getName());
