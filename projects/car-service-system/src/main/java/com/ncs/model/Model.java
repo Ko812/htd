@@ -69,7 +69,7 @@ public class Model {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 						
 			String v = "select * from customer_database where user_name=?";
@@ -104,7 +104,7 @@ public class Model {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			
 			String s = "select * from customer_database where user_name=?";
@@ -137,7 +137,7 @@ public class Model {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			
 			String s = "select * from customer_database where customer_id=?";
@@ -177,7 +177,7 @@ public class Model {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			String s = "select email from customer_database where email=?";
 			pstmt = con.prepareStatement(s);
@@ -195,7 +195,7 @@ public class Model {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			
 			String s = "select * from customer_database where user_name=?";
@@ -223,7 +223,7 @@ public class Model {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			
 			String s = "select * from customer_database where customer_id=?";
@@ -251,7 +251,7 @@ public class Model {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			String s = "select * from customer_database where user_name=?";
 			pstmt = con.prepareStatement(s);
@@ -269,7 +269,7 @@ public class Model {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			if(!oldUsername.equals(username) && usernameExists(username)) {
 				return -2;
@@ -302,7 +302,7 @@ public class Model {
 		try {
 			if(con == null || con.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			// delete account from personal details
 			
@@ -331,7 +331,7 @@ public class Model {
 		try {
 			if(conStat == null || conStat.isClosed()) {
 				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-				conStat = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "java_developer", "Password123!");
+				conStat = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_ncs_db", "root", "root");
 			}
 			
 			// Select all accounts in customer database
