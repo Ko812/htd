@@ -1,0 +1,122 @@
+CREATE TABLE `employers`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_name` varchar(50) NOT NULL,
+  `user_name` varchar(50) NOT NULL,
+  `password` varchar(48) NOT NULL,
+  `company_email` varchar(36) NOT NULL, 
+  `company_details` varchar(255) DEFAULT NULL,
+  `company_years_of_operation` tinyint DEFAULT NULL,
+  `vmv` varchar(255) DEFAULT NULL,
+  `company_website` varchar(30) DEFAULT NULL,
+  `company_size` varchar(13) DEFAULT NULL,
+
+  PRIMARY KEY (`id`),
+
+  UNIQUE KEY `USERNAME_UNIQUE` (`user_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `jobs`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date_posted` date DEFAULT NULL,
+  `job_role` varchar(50) NOT NULL,
+  `job_desc` varchar(200) NOT NULL,
+  `salary` mediumint NOT NULL,
+  `years_of_exp` tinyint NOT NULL, 
+  `employer_id` int(11) NOT NULL,
+  `company_name` varchar(50) NOT NULL,
+  `company_email` varchar(36) NOT NULL,
+
+  CONSTRAINT `FK_EMPLOYER` 
+  FOREIGN KEY (`employer_id`) 
+  REFERENCES `employers` (`id`),
+
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `job_seekers`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `user_name` varchar(50) NOT NULL,
+  `password` varchar(48) NOT NULL,
+  `email` varchar(36) NOT NULL,
+  `NRIC` varchar(10) NOT NULL,
+  `contact` varchar(8) NOT NULL,
+  `academic_1` varchar(36) DEFAULT NULL, 
+  `academic_2` varchar(36) DEFAULT NULL, 
+  `academic_3` varchar(36) DEFAULT NULL,
+  `academic_4` varchar(36) DEFAULT NULL, 
+  `academic_5` varchar(36) DEFAULT NULL, 
+  `years_of_exp` tinyint DEFAULT NULL,
+  `personal_website` varchar(30) DEFAULT NULL,
+  `work_experience_1` varchar(255) DEFAULT NULL,
+  `work_experience_2` varchar(255) DEFAULT NULL,
+  `work_experience_3` varchar(255) DEFAULT NULL,
+  `work_experience_4` varchar(255) DEFAULT NULL,
+  `work_experience_5` varchar(255) DEFAULT NULL,
+  `award_1` varchar(50) DEFAULT NULL,
+  `award_2` varchar(50) DEFAULT NULL,
+  `award_3` varchar(50) DEFAULT NULL,
+  `award_4` varchar(50) DEFAULT NULL,
+  `award_5` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `USERNAME_UNIQUE` (`user_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `applications`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_name` varchar(50) NOT NULL,
+  `company_email` varchar(36) NOT NULL,
+  `job_role` varchar(50) NOT NULL,
+  `job_desc` varchar(255) NOT NULL,
+  `salary` mediumint NOT NULL,
+  `years_of_exp` tinyint NOT NULL,
+  `application_date` date DEFAULT NULL,
+  `application_status` varchar(50) NOT NULL,
+  `js_first_name` varchar(50) DEFAULT NULL,
+  `js_last_name` varchar(50) NOT NULL, 
+  `js_contact` varchar(8) NOT NULL, 
+  `js_email` varchar(36) NOT NULL,
+  `js_years_of_exp` tinyint NOT NULL,
+  `js_identification_number` varchar(10) NOT NULL,
+  `js_cred_1` varchar(255) DEFAULT NULL,
+  `js_cred_2` varchar(255) DEFAULT NULL,
+  `js_cred_3` varchar(255) DEFAULT NULL,
+  `js_cred_4` varchar(255) DEFAULT NULL,
+  `js_cred_5` varchar(255) DEFAULT NULL,
+  `js_cred_6` varchar(255) DEFAULT NULL,
+  `js_cred_7` varchar(255) DEFAULT NULL,
+  `js_cred_8` varchar(255) DEFAULT NULL,
+  `js_cred_9` varchar(255) DEFAULT NULL,
+  `js_cred_10` varchar(255) DEFAULT NULL,
+  `js_cred_11` varchar(255) DEFAULT NULL,
+  `js_cred_12` varchar(255) DEFAULT NULL,
+  `js_cred_13` varchar(255) DEFAULT NULL,
+  `js_cred_14` varchar(255) DEFAULT NULL,
+  `js_cred_15` varchar(255) DEFAULT NULL,
+  `job_id` int(11) NOT NULL,
+  `job_seeker_id` int(11) NOT NULL,
+
+  CONSTRAINT `FK_JS`
+  FOREIGN KEY (`job_seeker_id`)
+  REFERENCES job_seekers (`id`),
+
+  CONSTRAINT `FK_JOB` 
+  FOREIGN KEY (`job_id`) 
+  REFERENCES jobs (`id`),
+  
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `session_codes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code_creation_date` date NOT NULL,
+  `code_creation_time` time NOT NULL,
+  `code_expiration_date` date NOT NULL,
+  `code_expiration_time` time NOT NULL,
+  `session` varchar(50) NOT NULL,
+  `user_email` varchar(255) NOT NULL,
+  
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=latin1;
