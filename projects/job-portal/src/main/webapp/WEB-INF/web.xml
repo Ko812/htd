@@ -2,8 +2,14 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>job-portal</display-name>
   <welcome-file-list>
-    <welcome-file>LoadDB</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+  <jsp-config>
+    <jsp-property-group>
+        <url-pattern>*.jsp</url-pattern>
+        <page-encoding>UTF-8</page-encoding>
+    </jsp-property-group>
+  </jsp-config>
   <servlet>
     <description></description>
     <display-name>EmployerLogin</display-name>
@@ -358,5 +364,95 @@
   <servlet-mapping>
     <servlet-name>SearchPostings</servlet-name>
     <url-pattern>/SearchPostings</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EditJobApplication</display-name>
+    <servlet-name>EditJobApplication</servlet-name>
+    <servlet-class>com.ncs.controller.EditJobApplication</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EditJobApplication</servlet-name>
+    <url-pattern>/EditJobApplication</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ViewSingleApplication</display-name>
+    <servlet-name>ViewSingleApplication</servlet-name>
+    <servlet-class>com.ncs.controller.ViewSingleApplication</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ViewSingleApplication</servlet-name>
+    <url-pattern>/ViewSingleApplication</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RemoveCred</display-name>
+    <servlet-name>RemoveCred</servlet-name>
+    <servlet-class>com.ncs.controller.RemoveCred</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoveCred</servlet-name>
+    <url-pattern>/RemoveCred</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UpdateAllApplicationToReceived</display-name>
+    <servlet-name>UpdateAllApplicationToReceived</servlet-name>
+    <servlet-class>com.ncs.controller.UpdateAllApplicationToReceived</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateAllApplicationToReceived</servlet-name>
+    <url-pattern>/UpdateAllApplicationToReceived</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LoadAllJobs</display-name>
+    <servlet-name>LoadAllJobs</servlet-name>
+    <servlet-class>com.ncs.controller.LoadAllJobs</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoadAllJobs</servlet-name>
+    <url-pattern>/LoadAllJobs</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EMSortApplications</display-name>
+    <servlet-name>EMSortApplications</servlet-name>
+    <servlet-class>com.ncs.controller.EMSortApplications</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EMSortApplications</servlet-name>
+    <url-pattern>/EMSortApplications</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EMBatchStatusUpdate</display-name>
+    <servlet-name>EMBatchStatusUpdate</servlet-name>
+    <servlet-class>com.ncs.controller.EMBatchStatusUpdate</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EMBatchStatusUpdate</servlet-name>
+    <url-pattern>/EMBatchStatusUpdate</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EMUpdateAllStatusTo</display-name>
+    <servlet-name>EMUpdateAllStatusTo</servlet-name>
+    <servlet-class>com.ncs.controller.EMUpdateAllStatusTo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EMUpdateAllStatusTo</servlet-name>
+    <url-pattern>/EMUpdateAllStatusTo</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EMUpdateSelectedStatusTo</display-name>
+    <servlet-name>EMUpdateSelectedStatusTo</servlet-name>
+    <servlet-class>com.ncs.controller.EMUpdateSelectedStatusTo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EMUpdateSelectedStatusTo</servlet-name>
+    <url-pattern>/EMUpdateSelectedStatusTo</url-pattern>
   </servlet-mapping>
 </web-app>

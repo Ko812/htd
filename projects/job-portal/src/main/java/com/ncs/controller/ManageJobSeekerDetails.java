@@ -28,10 +28,12 @@ public class ManageJobSeekerDetails extends HttpServlet {
 				sess.setAttribute("logged-in-job-seeker", js);
 				sess.setAttribute("outcome", "Details update successfully.");
 				sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+				sess.setAttribute("success-failure", "success");
 			}
 			else {
 				sess.setAttribute("outcome", "Details update failed.");
 				sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+				sess.setAttribute("success-failure", "failure");
 			}
 		}
 		else {
@@ -40,10 +42,12 @@ public class ManageJobSeekerDetails extends HttpServlet {
 				sess.setAttribute("logged-in-job-seeker", js);
 				sess.setAttribute("outcome", "Details update successfully.");
 				sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+				sess.setAttribute("success-failure", "success");
 			}
 			else {
 				sess.setAttribute("outcome", "Details update failed.");
 				sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+				sess.setAttribute("success-failure", "failure");
 			}
 		}
 		

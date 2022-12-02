@@ -1,9 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="utf-8">
 <title>Land A Job - Forget Password</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 <link href="/job-portal/style.css" rel="stylesheet">
@@ -29,7 +29,7 @@
 			<label for="jobSeekerRadio" class="form-label">Job Seeker</label>
 		</div>
 		<div class="form-floating mb-3">
-			<input type="text" name="email" class="form-control" placeholder="Email" id="floatingEmail">
+			<input type="text" name="email" class="form-control" placeholder="Email" id="floatingEmail" required maxlength="50">
 			<label for="floatingEmail">Email Address</label>
 		</div>
 		<%

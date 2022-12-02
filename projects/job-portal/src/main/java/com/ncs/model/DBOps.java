@@ -12,7 +12,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class DBOps {
 		super();
 		try {
 			DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/job_portal", "root", "root");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/job_portal", "java_developer", "Password123!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -42,7 +41,7 @@ public class DBOps {
 	
 	private void _connectIfNec() throws SQLException {
 		if(con == null || con.isClosed()) {
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/job_portal", "root", "root");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/job_portal", "java_developer", "Password123!");
 		}
 	}
 	
@@ -110,14 +109,14 @@ public class DBOps {
 		return false;
 	}
 	
-	public Integer resetPassword(String password, String loginAs, String email, String sc) {
+	public boolean resetPassword(String password, String loginAs, String email, String sc, HttpSession sess) {
 		if(loginAs.equals("employer")) {
-			return resetEMPassword(email, password, sc);
+			return resetEMPassword(email, password, sc, sess);
 		}
 		else if(loginAs.equals("jobSeeker")) {
-			return resetJSPassword(email, password, sc);
+			return resetJSPassword(email, password, sc, sess);
 		}
-		return -1;
+		return false;
 	}
 	
 	/********************************************
@@ -242,7 +241,7 @@ public class DBOps {
 		return false;
 	}
 	
-	public Integer resetEMPassword(String email, String password, String sessionCode) {
+	public boolean resetEMPassword(String email, String password, String sessionCode, HttpSession sess) {
 		try {
 			_connectIfNec();
 			if(validSessionCode(email, sessionCode)) {
@@ -250,16 +249,18 @@ public class DBOps {
 				pstmt = con.prepareStatement(s);
 				pstmt.setString(1, Encryption.encrypt(password));
 				pstmt.setString(2, email);
-				return pstmt.executeUpdate();
+				return pstmt.executeUpdate() == 1;
 			}
 			else {
-				return -1;
+				sess.setAttribute("login-form-message", "Your password reset link is no longer valid. Please try again.");
+				sess.setAttribute("form-message-read", Boolean.parseBoolean("false"));
+				return false;
 			}
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return false;
 	}
 	
 	public Integer updateEmployer(EmployerCompany ec) {
@@ -276,7 +277,7 @@ public class DBOps {
 			pstmt.setInt(5, ec.getYearsOfOperation());
 			pstmt.setString(6, ec.getVmv());
 			pstmt.setString(7, ec.getCompanyWebsite());
-//			pstmt.setInt(8, ec.getCompanySize().toString());
+			pstmt.setInt(8, ec.getCompanySizeInt());
 			pstmt.setInt(9, ec.getId());
 			return pstmt.executeUpdate();
 		}
@@ -313,7 +314,7 @@ public class DBOps {
 		try {
 			_connectIfNec();
 			
-			String s = "insert into jobs (date_posted, job_role, job_desc, salary, years_of_exp, employer_id, company_name, company_email) values (?, ?, ?, ?, ?, ?, ?, ?)";
+			String s = "insert into jobs (date_posted, job_role, job_desc, salary, years_of_exp, employer_id, company_name, company_email, job_status) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			Date date = Date.valueOf(LocalDate.now());
 			pstmt = con.prepareStatement(s);
 			pstmt.setDate(1, date);
@@ -324,6 +325,7 @@ public class DBOps {
 			pstmt.setInt(6, job.getEmployer_id());
 			pstmt.setString(7, job.getCompany_name());
 			pstmt.setString(8, job.getCompany_email());
+			pstmt.setString(9, job.getStatus().toString());
 			return pstmt.executeUpdate();
 		}
 		catch(SQLException e) {
@@ -332,18 +334,25 @@ public class DBOps {
 		return -1;
 	}
 	
-	public Integer editJob(Job job) {
+	public Integer editJob(Job job, HttpSession sess) {
 		try {
 			_connectIfNec();
+			if(!jobPostHasApplicants(job.getId())) {
+				String s = "update jobs set job_role=?, job_desc=?, salary=?, years_of_exp=? where id=?";
+				pstmt = con.prepareStatement(s);
+				pstmt.setString(1, job.getRole().toUpperCase());
+				pstmt.setString(2, job.getDesc());
+				pstmt.setInt(3, job.getSalary());
+				pstmt.setInt(4, job.getYears_of_exp());
+				pstmt.setInt(5, job.getId());
+				return pstmt.executeUpdate();
+			}
+			else {
+				sess.setAttribute("outcome", "Job posting already has applicants. To change job details, delete and create a new job posting.");
+				sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+				return -1;
+			}
 			
-			String s = "update jobs set job_role=?, job_desc=?, salary=?, years_of_exp=? where id=?";
-			pstmt = con.prepareStatement(s);
-			pstmt.setString(1, job.getRole().toUpperCase());
-			pstmt.setString(2, job.getDesc());
-			pstmt.setInt(3, job.getSalary());
-			pstmt.setInt(4, job.getYears_of_exp());
-			pstmt.setInt(5, job.getId());
-			return pstmt.executeUpdate();
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
@@ -351,7 +360,22 @@ public class DBOps {
 		return -1;
 	}
 	
-	public Integer deleteJob(Job job) {
+	public boolean jobPostHasApplicants(int jobID) {
+		try {
+			_connectIfNec();
+			String s = "select id from applications where job_id=?";
+			pstmt = con.prepareStatement(s);
+			pstmt.setInt(1, jobID);
+			res = pstmt.executeQuery();
+			return res.next();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public Integer closeJob(Job job) {
 		try {
 			_connectIfNec();
 			
@@ -361,28 +385,30 @@ public class DBOps {
 			// Query all applications for the job posting.
 			pstmt.setInt(1, job.getId());
 			res = pstmt.executeQuery();
-			List<Integer> appsToDelete = new ArrayList<Integer>();
+			List<Integer> appsToUpdate = new ArrayList<Integer>();
 			while (res.next()) {
 				int appID = res.getInt(1);
-				appsToDelete.add(appID);
+				appsToUpdate.add(appID);
 			}
 
-			// Delete all applications for the job posting.
-			String d = "delete from applications where ";
+			// Update all applications for the job posting.
+			String d = "update applications set application_status=? where ";
 			
-			for (int i = 0; i < appsToDelete.size(); i++) {
+			for (int i = 0; i < appsToUpdate.size(); i++) {
 				d = d.concat("id=? OR ");
 			}
 			d = d.concat("false");
 			pstmt = con.prepareStatement(d);
-			for (int i = 1; i <= appsToDelete.size(); i++) {
-				pstmt.setInt(i, appsToDelete.get(i));
+			pstmt.setString(1, ApplicationStatus.JobClosed.toString());
+			for (int i = 0; i < appsToUpdate.size(); i++) {
+				pstmt.setInt(i + 2, appsToUpdate.get(i));
 			}
 			int out = pstmt.executeUpdate();
-			if (out == appsToDelete.size()) {
-				String dj = "delete from jobs where id=?";
-				pstmt = con.prepareStatement(dj);
-				pstmt.setInt(1, job.getId());
+			if (out == appsToUpdate.size()) {
+				String cj = "update jobs set job_status=? where id=?";
+				pstmt = con.prepareStatement(cj);
+				pstmt.setString(1, JobStatus.Closed.toString());
+				pstmt.setInt(2, job.getId());
 				return pstmt.executeUpdate();
 			} else {
 				return -1;
@@ -394,7 +420,7 @@ public class DBOps {
 		return -1;
 	}
 	
-	public Integer deleteJob(int jobID) {
+	public Integer closeJob(int jobID) {
 		try {
 			_connectIfNec();
 			String a = "select id from applications where job_id=?";
@@ -403,28 +429,30 @@ public class DBOps {
 			// Query all applications for the job posting.
 			pstmt.setInt(1, jobID);
 			res = pstmt.executeQuery();
-			List<Integer> appsToDelete = new ArrayList<Integer>();
+			List<Integer> appsToUpdate = new ArrayList<Integer>();
 			while(res.next()) {
 				int appID = res.getInt(1);
-				appsToDelete.add(appID);
+				appsToUpdate.add(appID);
 			}
 			
-			// Delete all applications for the job posting.
-			String d = "delete from applications where ";
+			// Update all applications for the job posting.
+			String u = "update applications set application_status=? where ";
 			
-			for(int i=0;i<appsToDelete.size();i++) {
-				d = d.concat("id=? || ");
+			for(int i=0;i<appsToUpdate.size();i++) {
+				u = u.concat("id=? || ");
 			}
-			d = d.concat("false");
-			pstmt = con.prepareStatement(d);
-			for(int i=1;i<=appsToDelete.size();i++) {
-				pstmt.setInt(i, appsToDelete.get(i-1));
+			u = u.concat("false");
+			pstmt = con.prepareStatement(u);
+			pstmt.setString(1, ApplicationStatus.JobClosed.toString());
+			for(int i = 0; i < appsToUpdate.size(); i++) {
+				pstmt.setInt(i + 2, appsToUpdate.get(i));
 			}
 			int out = pstmt.executeUpdate();
-			if(out == appsToDelete.size()) {
-				String s = "delete from jobs where id=?";
+			if(out == appsToUpdate.size()) {
+				String s = "update jobs set job_status=? where id=?";
 				pstmt = con.prepareStatement(s);
-				pstmt.setInt(1, jobID);
+				pstmt.setString(1, JobStatus.Closed.toString());
+				pstmt.setInt(2, jobID);
 				return pstmt.executeUpdate();
 			}
 			else {
@@ -457,7 +485,10 @@ public class DBOps {
 				job.setId(res.getInt(1));
 				job.setDatePosted(res.getDate(2));
 				job.setEmployer_id(employer_id);
-				jobPostings.add(job);
+				job.setStatus(JobStatus.valueOf(res.getString(10)));
+				if(job.getStatus() == JobStatus.Open) {
+					jobPostings.add(job);
+				}
 			}
 			return jobPostings;
 		}
@@ -494,15 +525,18 @@ public class DBOps {
 			ArrayList<JobSeeker> applicants = new ArrayList<JobSeeker>();
 			try {
 				_connectIfNec();
-				String s = "select * from applications where job_id=?";
+				String s = "select application_status, job_seeker_id from applications where job_id=?";
 				pstmt = con.prepareStatement(s);
 				pstmt.setInt(1, job.getId());
 				res =  pstmt.executeQuery();
 				while(res.next()) {
-					int jsID = res.getInt(32);
-					JobSeeker js = new JobSeeker(this);
-					js.setId(jsID);
-					applicants.add(js);
+					ApplicationStatus appStatus = ApplicationStatus.valueOf(res.getString(1));
+					int jsID = res.getInt(2);
+					if(appStatus != ApplicationStatus.JobClosed) {
+						JobSeeker js = new JobSeeker(this);
+						js.setId(jsID);
+						applicants.add(js);
+					}
 				}
 			}
 			catch(SQLException e) {
@@ -526,7 +560,10 @@ public class DBOps {
 					Job job = new Job(res.getString(3), res.getString(4), res.getInt(5), res.getInt(6), this, res.getString(8), res.getString(9));
 					job.setId(res.getInt(1));
 					job.setDatePosted(res.getDate(2));
-					jobs.add(job);
+					job.setStatus(JobStatus.valueOf(res.getString(10)));
+					if(job.getStatus() == JobStatus.Open) {
+						jobs.add(job);
+					}
 				}
 			}
 			return jobs;
@@ -550,7 +587,11 @@ public class DBOps {
 				Job job = new Job(res.getString(3), res.getString(4), res.getInt(5), res.getInt(6), this, res.getString(8), res.getString(9));
 				job.setId(res.getInt(1));
 				job.setDatePosted(res.getDate(2));
-				jobs.add(job);
+				job.setStatus(JobStatus.valueOf(res.getString(10)));
+				if(job.getStatus() == JobStatus.Open) {
+					jobs.add(job);
+				}
+				
 			}
 			return jobs;
 		}
@@ -573,7 +614,10 @@ public class DBOps {
 					Job job = new Job(res.getString(3), res.getString(4), res.getInt(5), res.getInt(6), this, res.getString(8), res.getString(9));
 					job.setId(res.getInt(1));
 					job.setDatePosted(res.getDate(2));
-					jobs.add(job);
+					job.setStatus(JobStatus.valueOf(res.getString(10)));
+					if(job.getStatus() == JobStatus.Open) {
+						jobs.add(job);
+					}
 				}
 			}
 			return jobs;
@@ -597,7 +641,34 @@ public class DBOps {
 				Job job = new Job(res.getString(3), res.getString(4), res.getInt(5), res.getInt(6), this, res.getString(8), res.getString(9));
 				job.setId(res.getInt(1));
 				job.setDatePosted(res.getDate(2));
-				jobs.add(job);
+				job.setStatus(JobStatus.valueOf(res.getString(10)));
+				if(job.getStatus() == JobStatus.Open) {
+					jobs.add(job);
+				}
+			}
+			return jobs;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return jobs;
+	}
+	
+	public List<Job> loadAllJobs(){
+		List<Job> jobs = new ArrayList<Job>();
+		try {
+			_connectIfNec();
+			String s = "select * from jobs ORDER BY date_posted DESC";
+			pstmt = con.prepareStatement(s);
+			res = pstmt.executeQuery();
+			while(res.next()) {
+				Job job = new Job(res.getString(3), res.getString(4), res.getInt(5), res.getInt(6), this, res.getString(8), res.getString(9));
+				job.setId(res.getInt(1));
+				job.setDatePosted(res.getDate(2));
+				job.setStatus(JobStatus.valueOf(res.getString(10)));
+				if(job.getStatus() == JobStatus.Open) {
+					jobs.add(job);
+				}
 			}
 			return jobs;
 		}
@@ -687,41 +758,37 @@ public class DBOps {
 		try {
 			_connectIfNec();
 			
-			String s = "select id from jobs where employer_id=?";
+			String s = "select * from applications where job_id in (select id from jobs where employer_id=?) ORDER BY application_date DESC";
 			pstmt = con.prepareStatement(s);
 			pstmt.setInt(1, employer_id);
-			res = pstmt.executeQuery();
-			while(res.next()) {
-				String s2 = "select * from applications where job_id=?";
-				PreparedStatement pstmt2 = con.prepareStatement(s2);
-				pstmt2.setInt(1, res.getInt(1));
-				ResultSet res2 = pstmt2.executeQuery();
-				while(res2.next()) {
-					JobApplication app = new JobApplication();
-					app.setId(res2.getInt(1));
-					app.setCompanyName(res2.getString(2));
-					app.setCompanyEmail(res2.getString(3));
-					app.setJobRole(res2.getString(4));
-					app.setJobDesc(res2.getString(5));
-					app.setSalary(res2.getInt(6));
-					app.setYearsOfExp(res2.getInt(7));
-					app.setApplicationDate(res2.getDate(8));
-					app.setStatus(ApplicationStatus.valueOf(res2.getString(9)));
-					app.setJsFirstName(res2.getString(10));
-					app.setJsLastName(res2.getString(11));
-					app.setJsContact(res2.getString(12));
-					app.setJsEmail(res2.getString(13));
-					app.setJsYearsOfExp(res2.getInt(14));
-					app.setJsIdentificationNumber(res2.getString(15));
-					int i = 16;
-					List<String> appCreds = new ArrayList<String>();
-					while(res2.getString(i) != null) {
-						appCreds.add(res2.getString(i));
-						i++;
-					}
-					app.setApplicationCredential(appCreds);
-					app.setJob_id(res2.getInt(31));
-					app.setJob_seeker_id(res2.getInt(32));
+			ResultSet res2 = pstmt.executeQuery();
+			while(res2.next()) {
+				JobApplication app = new JobApplication();
+				app.setId(res2.getInt(1));
+				app.setCompanyName(res2.getString(2));
+				app.setCompanyEmail(res2.getString(3));
+				app.setJobRole(res2.getString(4));
+				app.setJobDesc(res2.getString(5));
+				app.setSalary(res2.getInt(6));
+				app.setYearsOfExp(res2.getInt(7));
+				app.setApplicationDate(res2.getDate(8));
+				app.setStatus(ApplicationStatus.valueOf(res2.getString(9)));
+				app.setJsFirstName(res2.getString(10));
+				app.setJsLastName(res2.getString(11));
+				app.setJsContact(res2.getString(12));
+				app.setJsEmail(res2.getString(13));
+				app.setJsYearsOfExp(res2.getInt(14));
+				app.setJsIdentificationNumber(res2.getString(15));
+				int i = 16;
+				List<String> appCreds = new ArrayList<String>();
+				while(res2.getString(i) != null) {
+					appCreds.add(res2.getString(i));
+					i++;
+				}
+				app.setApplicationCredential(appCreds);
+				app.setJob_id(res2.getInt(31));
+				app.setJob_seeker_id(res2.getInt(32));
+				if(app.getStatus() != ApplicationStatus.JobClosed){
 					applications.add(app);
 				}
 			}
@@ -812,7 +879,9 @@ public class DBOps {
 				app.setApplicationCredential(appCreds);
 				app.setJob_id(res.getInt(31));
 				app.setJob_seeker_id(res.getInt(32));
-				applications.add(app);
+				if(app.getStatus() != ApplicationStatus.ApplicationRetracted) {
+					applications.add(app);
+				}
 			}
 			return applications;
 		}
@@ -820,6 +889,35 @@ public class DBOps {
 			e.printStackTrace();
 		}
 		return applications;
+	}
+	
+	public boolean editJobApplication(JobApplication app, HttpSession sess) {
+		try {
+			_connectIfNec();
+			int totalCred = app.getApplicationCredential().size();
+			String s = "update applications set ";
+					
+			String condition = "where id=?";
+			if(totalCred > 0) {
+				for(int i = 1; i < totalCred;i++) {
+					s = s.concat("js_cred_"+i+"=?, ");
+				}
+				s = s.concat("js_cred_"+totalCred+"=? ");
+			}
+			s = s.concat(condition);
+			pstmt = con.prepareStatement(s);
+			
+			List<String> appCreds = app.getApplicationCredential();
+			for(int i = 1; i <= totalCred;i++) {
+				pstmt.setString(i, appCreds.get(i - 1));
+			}
+			pstmt.setInt(1 + totalCred, app.getId());
+			return pstmt.executeUpdate() == 1;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	public boolean updateAppStatus(int appID, String updateStatus) {
@@ -837,12 +935,55 @@ public class DBOps {
 		return false;
 	}
 	
+	public boolean updateSelectedAppsStatusTo(ApplicationStatus appStatus, List<JobApplication> apps) {
+		try {
+			_connectIfNec();
+			String s = "update applications set application_status=? where ";
+			if(!apps.isEmpty()) {
+				s = s.concat("id=? ");
+				for(int i = 1; i <apps.size(); i++) {
+					s = s.concat("OR id=? ");
+				}
+			}
+			pstmt = con.prepareStatement(s);
+			pstmt.setString(1, appStatus.toString());
+			for(int i = 0; i <apps.size(); i++) {
+				pstmt.setInt(2 + i, apps.get(i).getId());
+			}
+			return pstmt.executeUpdate() == apps.size();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean batchUpdateApplicationStatus(List<JobApplication> apps) {
+		try {
+			_connectIfNec();
+			int outcome = 0;
+			for(JobApplication app: apps) {
+				String s = "update applications set application_status=? where id=?";
+				pstmt = con.prepareStatement(s);
+				pstmt.setString(1, app.getStatus().toString());
+				pstmt.setInt(2, app.getId());
+				outcome += pstmt.executeUpdate();
+			}
+			return outcome == apps.size();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public void deleteAllJobApplications(int jsID) {
 		try {
 			_connectIfNec();
-			String s = "delete from applications where job_seeker_id=?";
+			String s = "update applications set application_status=? where job_seeker_id=?";
 			pstmt = con.prepareStatement(s);
-			pstmt.setInt(1, jsID);
+			pstmt.setString(1, ApplicationStatus.ApplicationRetracted.toString());
+			pstmt.setInt(2, jsID);
 			pstmt.executeUpdate();
 		}
 		catch(Exception e) {
@@ -976,7 +1117,7 @@ public class DBOps {
 		return false;
 	}
 	
-	public Integer resetJSPassword(String email, String password, String sc) {
+	public boolean resetJSPassword(String email, String password, String sc, HttpSession sess) {
 		try {
 			_connectIfNec();
 			
@@ -985,16 +1126,18 @@ public class DBOps {
 				pstmt = con.prepareStatement(s);
 				pstmt.setString(1, Encryption.encrypt(password));
 				pstmt.setString(2, email);
-				return pstmt.executeUpdate();
+				return pstmt.executeUpdate() == 1;
 			}
 			else {
-				return -1;
+				sess.setAttribute("login-form-message", "Password reset link is no longer valid. Please try again.");
+				sess.setAttribute("form-message-read", Boolean.parseBoolean("false"));
+				return false;
 			}
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return false;
 	}
 	
 	public boolean changePassword(JobSeeker js, String oldPassword, String newPassword, HttpSession sess) {
@@ -1205,11 +1348,11 @@ public class DBOps {
 			d = d.concat("false");
 			pstmt = con.prepareStatement(d);
 			for (int i = 1; i <= appsToDelete.size(); i++) {
-				pstmt.setInt(i, appsToDelete.get(i));
+				pstmt.setInt(i, appsToDelete.get(i - 1));
 			}
 			int out = pstmt.executeUpdate();
 			if (out == appsToDelete.size()) {
-				String s = "delete from job_seeker where id=?";
+				String s = "delete from job_seekers where id=?";
 				pstmt = con.prepareStatement(s);
 				pstmt.setInt(1, js.getId());
 				return pstmt.executeUpdate() == 1;
@@ -1321,13 +1464,14 @@ public class DBOps {
 		return false;
 	}
 	
-	public boolean deleteJobApplication(int appID) {
+	public boolean cancelJobApplication(int appID) {
 		try {
 			_connectIfNec();
 			
-			String s = "delete from applications where id=?";
+			String s = "update applications set application_status=? where id=?";
 			pstmt = con.prepareStatement(s);
-			pstmt.setInt(1, appID);
+			pstmt.setString(1, ApplicationStatus.ApplicationRetracted.toString());
+			pstmt.setInt(2, appID);
 			return pstmt.executeUpdate() == 1;
 		}
 		catch(SQLException e) {

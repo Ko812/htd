@@ -30,6 +30,7 @@
 		companyName = app.getCompanyName();
 		role = app.getJobRole();
 		desc = app.getJobDesc();
+		desc = desc.replace("\n", "<br>");
 		salary = app.getSalary();
 		yearsOfExpRq = app.getYearsOfExp();
 		companyEmail = app.getCompanyEmail();
@@ -45,30 +46,35 @@
 	
 %>
 <div class="emp-main-content">
-	<div class="detailed-job-item">
-		<div class="job-item-button">
-			<div class="company-logo">C</div>
-			<div class="job-info-column">
-				<div class="company-name job-meta">
-					<%=companyName%></div>
-				<div class="job-role job-meta">
-					<%=role%></div>
-				<div class="job-yoe job-meta">
-					At least
-					<%=yearsOfExpRq%>
-					years
+	<div class="detailed-job-info-box">
+		<div class="detailed-company-logo-box">
+			<div class="detailed-company-logo-1"></div>
+		</div>
+		<div class="detailed-job-info-column">
+			<div class="detailed-major-job-meta-box">
+				<div class="detailed-major-job-meta">
+					<%=companyName%>
 				</div>
-				<div class="company-email job-meta">
+				<div class="detailed-minor-job-meta">
 					<%=companyEmail%>
 				</div>
 			</div>
-			<div class="job-salary job-meta">
-				<span> <%=salary%><br>SGD/MTH</span>
+			<div class="detailed-minor-job-meta-box">
+				<div class="detailed-minor-job-meta detailed-job-meta-spacer detailed-job-meta-italicise">
+					<%=role%>&nbsp;(min. <%=yearsOfExpRq%> years exp.)
+				</div>
+				<div class="detailed-minor-job-meta">
+					<%=desc%>
+				</div>
+				<br>
+				<div class="detailed-minor-job-meta">
+					<span>Annual salary: <%=salary%> SGD</span>
+				</div>
 			</div>
 		</div>
 	</div>
 	<form class="form-max-width border rounded-3 bg-light"
-		action="/job-portal/CreateJobApplication">
+		action="/job-portal/EditJobApplication">
 		<div class="form-title">Edit to Application</div>
 		<div class="form-group form-name-group">
 			<label for="floatingName" class="form-label">Name</label><%=lastName%>&nbsp;<%=firstName%>
@@ -82,6 +88,10 @@
 		<div class="form-group emp-form-row-style">
 			<label for="floatingContact" class="form-label">Contact number</label><%=contact%>
 		</div>
+		<div class="form-group emp-form-row-style">
+			<label for="floatingYearsOfExp" class="form-label">Years of Experience</label><%=yearsOfExp%>
+		</div>
+		
 		<div id="acadFormInputs" class="form-subsection">
 			<div class="form-sub-title">Academic</div>
 			<%
@@ -127,7 +137,7 @@
 		<div class="row emp-form-row-style">
 			<div class="button-row">
 				<button type="button" onclick="location.href='/job-portal/seeker/jobSeekerDashboard.jsp?currentView=add-credentials'" class="login-button edit-job-form-button">Add Credentials</button>
-				<input type="submit" value="Edit" class="login-button edit-job-form-button">
+				<input type="submit" value="Save" class="login-button edit-job-form-button">
 			</div>
 		</div>
 	</form>

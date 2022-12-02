@@ -24,7 +24,8 @@ public class JobApplication {
 	private List<String> applicationCredential;
 	private int job_id;
 	private int job_seeker_id;
-
+	private boolean checked = false;
+	
 	public int getJob_seeker_id() {
 		return job_seeker_id;
 	}
@@ -54,6 +55,19 @@ public class JobApplication {
 			applicationCredential = new ArrayList<String>();
 		}
 		applicationCredential.add(cred);
+	}
+	
+	public void updateCredentials(JobSeeker js) {
+		applicationCredential = new ArrayList<String>();
+		for(int i = 0; i < js.getAcadDetails().size();i++) {
+			addCredentials(js.getAcadDetails().get(i).toString());
+		}
+		for(int i = 0; i < js.getWorkExp().size();i++) {
+			addCredentials(js.getWorkExp().get(i).toString());
+		}
+		for(int i = 0; i < js.getAwards().size();i++) {
+			addCredentials(js.getAwards().get(i).toString());
+		}
 	}
 	
 	/**************************************
@@ -176,6 +190,14 @@ public class JobApplication {
 	}
 	public void setYearsOfExp(int yearsOfExp) {
 		this.yearsOfExp = yearsOfExp;
+	}
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
 	}
 	
 }

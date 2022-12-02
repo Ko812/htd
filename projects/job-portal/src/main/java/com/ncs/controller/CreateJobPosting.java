@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import com.ncs.model.EmployerCompany;
 import com.ncs.model.Job;
+import com.ncs.model.JobStatus;
 import com.ncs.model.SearchUtility;
 
 
@@ -62,15 +63,18 @@ public class CreateJobPosting extends HttpServlet {
 		}
 		Job job = new Job(jobRole, jobDescription, salary, yearsOfExperience, ec.db, ec.getCompanyName(), ec.getCompanyEmail());
 		job.setEmployer_id(ec.getId());
+		job.setStatus(JobStatus.Open);
 		int outcome = ec.createJobPosting(job);
 		if(outcome == 1) {
-			sess.setAttribute("outcome", "Job posting created");
+			sess.setAttribute("outcome", "Job posting created successfully!");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "success");
 			resp.sendRedirect("/job-portal/ViewJobPostings");
 		}
 		else {
 			sess.setAttribute("outcome", "Job posting creation unsuccessful.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "failure");
 			resp.sendRedirect("/job-portal/employer/employerDashboard.jsp");
 		}
 	}

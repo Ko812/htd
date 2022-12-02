@@ -20,13 +20,15 @@ public class DeleteEMAccount extends HttpServlet {
 		EmployerCompany ec = (EmployerCompany) sess.getAttribute("logged-in-employer");
 		
 		if(ec.delete()) {
-			sess.setAttribute("outcome", "Account deleted");
+			sess.setAttribute("outcome", "Account deleted successfully.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "success");
 			resp.sendRedirect("/job-portal/EMLogout");
 		}
 		else {
 			sess.setAttribute("outcome", "Account delete failed. Try again later.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "failure");
 			resp.sendRedirect("/job-portal/employer/employerDashboard.jsp");
 		}
 	}

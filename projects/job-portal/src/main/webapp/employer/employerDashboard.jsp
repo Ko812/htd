@@ -1,31 +1,36 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Land A Job - DashBoard</title>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<script src="https://kit.fontawesome.com/b5b7b3504f.js" crossorigin="anonymous"></script>
 <link href="/job-portal/style.css" rel="stylesheet" type="text/css">
 
 </head>
 <body>
+	<%@page import="com.ncs.model.*" %>
 	<%
 		String currentView = (String) request.getParameter("currentView");
 		if(currentView == null){
 			currentView = "view-job-postings";
 		}
-		
+		EmployerCompany ec = (EmployerCompany) session.getAttribute("logged-in-employer");
+		String companyName = ec.getCompanyName();
 	%>
 	<header class="nav-bar-header" id="top">
 		<div class="site-logo"><a href="#top" class="site-logo-link">Land A Job</a></div>
+		<div class="logged-in-user-name"><%=companyName%></div>
 		<nav class="nav-bar">
 			<button onclick="logout()" type="button" class="login-button">Log out</button>		
 		</nav>
 	</header>
 	<div class="container-stack">
 		<div class="body-base">
-			<div class="background-hero"></div>
+			<div class="em-background-hero"></div>
 		</div>
 		<div class="emp-body-container">
 			<div class="side-nav-bar">
@@ -43,9 +48,24 @@
 				if(outcome != null && !outcomeRead){
 					session.setAttribute("outcome-read", Boolean.parseBoolean("true"));
 				%>
-					<div class="form-message">
+				<div class="outcome-message-box">
+					<div class="outcome-message">
+						<%
+							String sf = (String) session.getAttribute("success-failure");
+						if(sf != null && sf.equals("success")){
+							%>
+							<i class="fa-solid fa-circle-check" style="color:green"></i>
+							<%
+						}
+						else if(sf != null && sf.equals("failure")){
+							%>
+							<i class="fa-solid fa-circle-xmark" style="color:red"></i>
+							
+						<%}%>
+						
 						<%=outcome%>
 					</div>
+				</div>
 			<%}
 				if(currentView.equals("manage-account")){
 					%><jsp:include page="manageAccount.jsp" />
@@ -61,6 +81,10 @@
 				}
 				if(currentView.equals("view-job-postings")){
 					%><jsp:include page="viewJobPostings.jsp" />
+					<%
+				}
+				if(currentView.equals("view-single-application")){
+					%><jsp:include page="viewSingleApplication.jsp" />
 					<%
 				}
 				if(currentView.equals("view-applications")){

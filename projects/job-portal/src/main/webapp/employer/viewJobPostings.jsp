@@ -44,11 +44,11 @@
 	                <option value="Cyber-security Manager"></option>
 	                <option value="Cyber-security Executive"></option>
             	</datalist>
-				<button type="submit" class="search-button">&#128269</button>
+				<button type="submit" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
 			</div>
 			<div class="search-option-box">
 				<div class="form-group filter-item">
-					<label for="filterBy" class="form-label">Filter by Job Role:</label> <select
+					<label for="filterBy" class="form-filter-label">Filter by Job Role:</label> <select
 						name="filterByJobRole" id="filterByJobRole">
 						<option value="all" selected>All job postings</option>
 						<%
@@ -67,7 +67,7 @@
 					</select>
 				</div>
 				<div class="form-group filter-item">
-					<label for="filterBy" class="form-label">Filter by Date Posted:</label> <select
+					<label for="filterBy" class="form-filter-label">Filter by Date Posted:</label> <select
 						name="filterByDatePosted" id="filterByDatePosted">
 						<option value="all"
 							<%=filterDatePosted.equals("all") ? "selected" : ""%>>All
@@ -98,30 +98,13 @@
 			<input type="text" name="viewBy" value="search" style="display:none; width:0px;height:0px">
 		</form>
 	</div>
-<!-- 	<div class="em-search-form-container"> -->
-<!-- 		<form action="" class="rounded-3 bg-light job-posting-search-form"> -->
-			
-<!-- 			<div class="job-posting-search-field-box"> -->
-<!-- 				<label for="jobRoleSearch" class="form-label">Search: </label> -->
-<!-- 				<input type="search" list="jobRolesDataList"  -->
-<!-- 					class="search-field search-job-posting-field-width"  -->
-<%-- 					name="searchJobPosting" placeholder="Search job postings" value="<%=searchField%>" --%>
-<!-- 					id="jobRoleSearch"> -->
-<!-- 				<button type="submit" class="search-button">&#128269;</button> -->
-				
-<!-- 			</div> -->
-<!-- 			<div class="filter-options-box"> -->
-			
-<!-- 			</div> -->
-<!-- 		</form> -->
-<!-- 	</div> -->
+
 	<table class="job-postings-table">
 		<thead>
 		<tr>
 			<th>Job ID</th>
 			<th>Date Posted</th>
 			<th>Job Role</th>
-			<th>Years of Experience</th>
 			<th>Total Applicants</th>
 			<th></th>
 		</tr>
@@ -129,17 +112,14 @@
 		<tbody>
 			<%@ page import="java.util.*"%>
 			<%@ page import="com.ncs.model.*"%>
-			<%
-				
+			<%	
 				if(filteredPostings != null){
-				for(Job job : filteredPostings ){
-					
-				%>
+				for(Job job : filteredPostings ){	
+			%>
 			<tr>
 				<td><%=job.getId()%></td>
 				<td><%=job.getDatePosted()%></td>
-				<td><%=job.getRole()%></td>
-				<td><%=job.getYears_of_exp()%></td>
+				<td style="max-width:233px"><%=job.getRole()%></td>
 				<td><%=job.getApplicants().size()%></td>
 				<td>
 					<button type="button"
@@ -147,7 +127,7 @@
 					<button type="button"
 						onclick="viewApplicantsOfThisJob('<%=job.getId()%>')" class="login-button view-applicants-button">View applicants</button>
 					<button type="button"
-						onclick="deleteJobPosting('<%=job.getId()%>')" class="login-button job-postings-button">Delete</button>
+						onclick="closeJobPosting('<%=job.getId()%>')" class="login-button job-postings-button">Close</button>
 				</td>
 			</tr>
 			<%}}%>
@@ -160,8 +140,8 @@
 		function editJobPosting(job_id){
 			location.href = "/job-portal/GetJobObject?jobID="+job_id;
 		}
-		function deleteJobPosting(job_id){
-			if(confirm("Confirm delete job posting?")){
+		function closeJobPosting(job_id){
+			if(confirm("Confirm that this job posting is closed?")){
 				location.href = "/job-portal/DeleteJobPosting?jobID="+job_id;	
 			}
 		}

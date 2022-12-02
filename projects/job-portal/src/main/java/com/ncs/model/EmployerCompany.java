@@ -1,8 +1,6 @@
 package com.ncs.model;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 public class EmployerCompany {
@@ -58,16 +56,16 @@ public class EmployerCompany {
 		return db.createJob(job);
 	}
 	
-	public Integer editJobPosting(Job job) {
-		return db.editJob(job);
+	public Integer editJobPosting(Job job, HttpSession sess) {
+		return db.editJob(job, sess);
 	}
 	
-	public Integer deleteJobPosting(Job job) {
-		return db.deleteJob(job);
+	public Integer closeJobPosting(Job job) {
+		return db.closeJob(job);
 	}
 	
-	public Integer deleteJobPosting(int jobID) {
-		return db.deleteJob(jobID);
+	public Integer closeJobPosting(int jobID) {
+		return db.closeJob(jobID);
 	}
 	
 	public List<Job> viewJobPostings(){
@@ -86,6 +84,14 @@ public class EmployerCompany {
 	
 	public boolean updateApplicationStatus(int appID, String appStatus) {
 		return db.updateAppStatus(appID, appStatus);
+	}
+	
+	public boolean updateSelectedAppsStatusTo(ApplicationStatus appStatus, List<JobApplication> apps) {
+		return db.updateSelectedAppsStatusTo(appStatus, apps);
+	}
+	
+	public boolean batchUpdateApplicationStatus(List<JobApplication> apps) {
+		return db.batchUpdateApplicationStatus(apps);
 	}
 	
 	/**************************************
@@ -159,6 +165,27 @@ public class EmployerCompany {
 	
 	public CompanySize getCompanySize() {
 		return companySize;
+	}
+	
+	public int getCompanySizeInt() {
+		switch(companySize) {
+			case Small:
+				return 1;
+			case SmallMedium:
+				return 2;
+			case Medium:
+				return 3;
+			case MediumLarge:
+				return 4;
+			case Large:
+				return 5;
+			case Transnational:
+				return 6;
+			case Multinational:
+				return 7;
+			default:
+				return 1;
+		}
 	}
 	
 	public int getCompanySize(boolean inInteger) {

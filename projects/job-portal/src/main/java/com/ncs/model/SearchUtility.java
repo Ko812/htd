@@ -78,6 +78,9 @@ public class SearchUtility {
 	
 	public boolean isNumeric(String str, boolean digitsOnly) {
 		String digits = "0123456789";
+		if(str.isBlank()) {
+			return false;
+		}
 		if(digitsOnly) {
 			for(int i = 0; i<str.length();i++) {
 				if(!digits.contains(str.charAt(i) + "")) {

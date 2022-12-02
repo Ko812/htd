@@ -15,26 +15,27 @@
 			<label for="floatingJobRole" class="form-label">Job Role</label>
 			<input type="text" name="jobRole" class="form-control"
 				placeholder="Job Role" id="floatingJobRole"
-				value="<%=role%>" maxlength="20">
+				value="<%=role%>" maxlength="20"  required>
 			<div id="invalidJobRoleMessageTag" style="display:none"><small style="color: red">Job role must be less than 20 characters.</small></div>
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingJobDescription" class="form-label">Job Description</label>
 			<textarea name="jobDescription" class="form-control" style="text-align: start"
-				placeholder="Job Description" id="floatingJobDescription" rows="4"
+				placeholder="Job Description" id="floatingJobDescription" rows="4" required
+				 minlength="40" maxlength="200"
 				><%=desc%></textarea>
 			<div id="invalidJobDescriptionMessageTag" style="display:none"><small style="color: red">Job description must be at least 40 characters and at most 200 characters in length.</small></div>
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingSalary" class="form-label">Annual Salary (SGD)</label>
 			<input type="number" name="salary" class="form-control"
-				placeholder="Salary" id="floatingSalary"
+				placeholder="Salary" id="floatingSalary" required max=16777215
 				value="<%=salary%>" min=0>
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingYearsOfExp" class="form-label">Years of Experience</label>
 			<input type="number" name="yearsOfExperience" class="form-control"
-				placeholder="Years of Experience" id="floatingYearsOfExp"
+				placeholder="Years of Experience" id="floatingYearsOfExp" required max=255 
 				value="<%=yearsOfExp%>" min=0>
 		</div>
 		<%
@@ -65,7 +66,7 @@
 		const invalidJobRoleMessageEl = document.getElementById("invalidJobRoleMessageTag");
 		const invalidjobDescMessageEl = document.getElementById("invalidJobDescriptionMessageTag");
 		jobRoleEl.addEventListener("keyup", (event)=>{
-			if(event.target.value.length == 20){
+			if(event.target.value.length == 0 || event.target.value.length >= 20){
 				invalidJobRoleMessageEl.style.display = "block";
 				return;
 			}

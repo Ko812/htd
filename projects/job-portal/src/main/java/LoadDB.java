@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoadDB extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("This file is loaded first !");
+		
 		resp.sendRedirect("/job-portal/index.jsp");
 	}
 

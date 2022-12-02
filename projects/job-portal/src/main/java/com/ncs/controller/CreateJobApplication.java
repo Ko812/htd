@@ -27,24 +27,28 @@ public class CreateJobApplication extends HttpServlet {
 		HttpSession sess = req.getSession();
 		JobSeeker js = (JobSeeker) sess.getAttribute("logged-in-job-seeker");
 		Job job = (Job) sess.getAttribute("job-to-apply");
-		System.out.println(js.getAcadDetails());
 		boolean noCredentials = js.getAcadDetails().isEmpty() && js.getWorkExp().isEmpty() && js.getAwards().isEmpty();
 		if(noCredentials) {
 			sess.setAttribute("outcome", "At least 1 credential is required to apply for job.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "failure");
 			resp.sendRedirect("/job-portal/seeker/jobSeekerDashboard.jsp?currentView=add-credentials");
 			return;
 		}
 		if(js.applyJob(job, sess)) {
 			sess.setAttribute("outcome", "Job application sent!");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "success");
 			List<JobApplication> apps = js.pullJobsApplied();
 			sess.setAttribute("applications", apps);
 		}
 		else {
 			sess.setAttribute("outcome", "Job application failed to send.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "failure");
 		}
+		sess.setAttribute("job-to-apply", null);
+		sess.setAttribute("jobIDStr", null);
 		resp.sendRedirect("/job-portal/seeker/jobSeekerDashboard.jsp?currentView=view-jobs-applied");
 	}
 

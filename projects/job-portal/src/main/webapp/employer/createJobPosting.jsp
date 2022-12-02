@@ -34,25 +34,25 @@
 		<div class="form-title">Create Job Posting</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingJobRole" class="form-label">Job Role</label>
-			<input type="text" name="jobRole" class="form-control"
+			<input type="text" name="jobRole" class="form-control"  required
 				placeholder="Job Role" id="floatingJobRole" maxlength="20">
 			<div id="invalidJobRoleMessageTag" style="display:none"><small style="color: red">Job role must not be empty or be less than 20 characters.</small></div>
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingJobDescription" class="form-label">Job Description</label>
-			<textarea name="jobDescription" class="form-control" maxlength="200"
+			<textarea name="jobDescription" class="form-control" minlength="40" maxlength="200" required
 				placeholder="Job Description" id="floatingJobDescription" rows="4"></textarea>
 			<div id="invalidJobDescriptionMessageTag" style="display:none"><small style="color: red">Job description must be at least 40 characters and at most 200 characters in length.</small></div>
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingSalary" class="form-label">Annual Salary (SGD)</label>
-			<input type="number" name="salary" class="form-control"
-				placeholder="Salary" id="floatingSalary" min=0>
+			<input type="number" name="salary" class="form-control" required
+				placeholder="Salary" id="floatingSalary" min=0 max=16777215>
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingYearsOfExp" class="form-label">Years of Experience</label>
 			<input type="number" name="yearsOfExperience" class="form-control"
-				placeholder="Years of Experience" id="floatingYearsOfExp" min=0>
+				placeholder="Years of Experience" id="floatingYearsOfExp" min=0 max=255 required>
 		</div>
 		<%
 			String formMessage = (String) session.getAttribute("create-job-posting-form-message");
@@ -68,6 +68,11 @@
 			<div class="row-item">
 				<button type="button" onclick="back()" class="login-button">Back</button>
 			</div>
+			
+			<div class="row-item">
+				<input type="reset" class="login-button">
+			</div>
+			
 			<div class="row-item">
 				<button type="submit" class="login-button">Post</button>
 			</div>

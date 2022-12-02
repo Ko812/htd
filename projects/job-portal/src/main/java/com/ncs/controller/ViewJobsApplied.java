@@ -23,8 +23,8 @@ public class ViewJobsApplied extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession sess = req.getSession();
 		JobSeeker js = (JobSeeker) sess.getAttribute("logged-in-job-seeker");
-		List<JobApplication> apps = js.pullJobsApplied();
-		sess.setAttribute("applications" , apps);
+		sess.setAttribute("applications" , js.pullJobsApplied());
+		sess.setAttribute("flow", null);
 		resp.sendRedirect("/job-portal/seeker/jobSeekerDashboard.jsp?currentView=view-jobs-applied");
 	}
 

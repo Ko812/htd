@@ -50,17 +50,17 @@ public class EditJobPosting extends HttpServlet {
 		job.setDesc(jobDescription);
 		job.setSalary(salary);
 		job.setYears_of_exp(yearsOfExperience);
-		int outcome = ec.editJobPosting(job);
-		if(outcome == 1) {
-			sess.setAttribute("outcome", "Job posting updated");
+		if(ec.editJobPosting(job, sess) == 1) {
+			sess.setAttribute("outcome", "Job posting updated successfully.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
-			List<Job> jobs = ec.viewJobPostings();
-			sess.setAttribute("jobs", jobs);
+			sess.setAttribute("success-failure", "success");
+			sess.setAttribute("jobs", ec.viewJobPostings());
 			resp.sendRedirect("/job-portal/employer/employerDashboard.jsp");
 		}
 		else {
-			sess.setAttribute("outcome", "Job posting creationg unsuccessful.");
+			sess.setAttribute("outcome", "Job posting update unsuccessful.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "failure");
 			resp.sendRedirect("/job-portal/employer/employerDashboard.jsp");
 		}
 	}

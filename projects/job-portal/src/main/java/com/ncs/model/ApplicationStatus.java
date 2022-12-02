@@ -15,5 +15,7 @@ public enum ApplicationStatus {
 	JobSeekerAccepted,
 	JobSeekerDeclined,
 	JobConfirmed,
+	JobClosed,
+	ApplicationRetracted,
 	Expired,
 }

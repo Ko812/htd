@@ -35,6 +35,7 @@ public class JSChangePassword extends HttpServlet {
 		if(js.changePassword(oldPassword, cfmPassword, sess)) {
 			sess.setAttribute("outcome", "Password changed successfully.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "success");
 			resp.sendRedirect("/job-portal/seeker/jobSeekerDashboard.jsp");
 		}
 		else {

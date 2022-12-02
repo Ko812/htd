@@ -17,6 +17,7 @@ public class Job {
 	private String company_name;
 	private String company_email;
 	private List<JobSeeker> applicants;
+	private JobStatus status;
 	private DBOps db;
 
 	public Job(String role, String desc, int salary, int years_of_exp, DBOps db, String companyName, String companyEmail) {
@@ -119,6 +120,14 @@ public class Job {
 
 	public void setCompany_email(String company_email) {
 		this.company_email = company_email;
+	}
+
+	public JobStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(JobStatus status) {
+		this.status = status;
 	}
 	
 }

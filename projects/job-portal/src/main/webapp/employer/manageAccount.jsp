@@ -28,43 +28,44 @@
 			<label for="floatingCompanyName">Company Name</label>
 			<input type="text" name="companyName" class="form-control"
 				placeholder="Company Name" id="floatingCompanyName"
-				value="<%=companyName%>">
+				value="<%=companyName%>" required maxlength="50">
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingUserName">User name</label>
 			<input type="text" name="userName" class="form-control"
 				placeholder="User name" id="floatingUserName"
-				value="<%=userName%>"> 
+				value="<%=userName%>" required maxlength="50"> 
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingCompanyEmail">Company Email</label>
 			<input type="text" name="companyEmail" class="form-control"
 				placeholder="Company Email" id="floatingCompanyEmail"
-				value="<%=companyEmail%>">
+				value="<%=companyEmail%>" required maxlength="50">
+			<small id="emailValidationMessage" style="display:none; color:red;">Email address not in a valid format.</small>
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingCompanyDetails">Company Details</label>
 			<textarea name="companyDetails" class="form-control"
-				placeholder="Company Details" id="floatingCompanyDetails"><%=companyDetails%></textarea>
+				placeholder="Company Details" id="floatingCompanyDetails" maxlength="255"><%=companyDetails%></textarea>
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingYearsOfOperation">Years Of Operation</label>
 			<input type="number" name="yearsOfOperation" class="form-control"
 				placeholder="Years of Operation" id="floatingYearsOfOperation"
-				value="<%=yearsOfOperation%>" min=0>
+				value="<%=yearsOfOperation%>" min=0 max=255>
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingCompanyVMV">VMV</label>
 			<input type="text" name="companyVMV" class="form-control"
 				placeholder="Company VMV" id="floatingCompanyVMV"
-				value="<%=vmv%>">
+				value="<%=vmv%>" maxlength="255">
 			
 		</div>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingCompanyWebsite">Website</label>
 			<input type="text" name="companyWebsite" class="form-control"
 				placeholder="Company Website" id="floatingCompanyWebsite"
-				value="<%=companyWebsite%>">
+				value="<%=companyWebsite%>" maxlength="50">
 			
 		</div>
 		<div class="form-group emp-form-row-style">
@@ -103,6 +104,15 @@
 		const back = () => {
 			history.back();
 		}
+		const emailEl = document.getElementById("floatingCompanyEmail");
+		const invalidEmailMessage = document.getElementById("emailValidationMessage");
+		emailEl.addEventListener("change", (event) => {
+			if(!validEmail(event.target.value)){
+				invalidEmailMessage.style.display = "block";
+				return;
+			}
+			invalidEmailMessage.style.display = "none";
+		});
 	</script>
 		
 </div>

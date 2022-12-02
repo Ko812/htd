@@ -45,12 +45,14 @@ public class ManageCompanyDetails extends HttpServlet {
 		if(outcome == 1) {
 			sess.setAttribute("outcome", "Company account update success.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "success");
 			sess.setAttribute("logged-in-employer", ec);
 			resp.sendRedirect("/job-portal/employer/employerDashboard.jsp");
 		}
 		else {
 			sess.setAttribute("outcome", "Company account update unsuccessful.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "failure");
 			resp.sendRedirect("/job-portal/employer/employerDashboard.jsp?currentView=manage-account");
 		}
 		

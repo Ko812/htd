@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 /*************************************
 Loader to load the employer, jobs and job
@@ -41,13 +42,14 @@ public class Loader {
 	
 	public static PreparedStatement pstmt;
 	public static Scanner reader = new Scanner(System.in);
-	public final static String path = "c:\\users\\user\\desktop\\ncs\\job-portal\\job_portal_job_data.csv";
+	public static ResultSet res;
+	public final static String path = "c:\\users\\user\\desktop\\ncs\\job-portal\\job_portal_job_seeker_data.csv";
 	public final static String un = "java_developer";
 	public final static String pwd = "Password123!";
 	public final static Random rand = new Random();
 	
 	public static void main(String[] args) throws IOException {
-		updateEmployerSize(un, pwd);
+		updateApplicationDates(un, pwd);
 	}
 	
 	public static void updateEmployersData(String fullPath, String dbUsername, String password) {
@@ -73,6 +75,60 @@ public class Loader {
 				System.out.println("View query: " + pstmt);
 			}
 			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void updateApplicationDates(String userName, String password) {
+		try {
+			DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/job_portal", userName, password);
+			
+			//e.g. fullPath = "c:\\job-portal\\job_portal_employer_data.csv";
+
+			List<Integer> appIDs = new ArrayList<Integer>();
+			String s = "select id from applications";
+			pstmt = con.prepareStatement(s);
+			res = pstmt.executeQuery();
+			while(res.next()) {
+				appIDs.add(res.getInt(1));
+			}
+			int totalApps = appIDs.size();
+			int appsUpdated = 0;
+			for(Integer id : appIDs) {
+				int year = 2022;
+				int month = rand.nextInt(1, 12);
+				int day;
+				Set<Integer> longMonths = Set.of(1, 3, 5, 7, 8, 10, 12) ;
+				
+				if(month == 11) {
+					day = rand.nextInt(1, 24);
+				}
+				else if(longMonths.contains(month)){
+					day = rand.nextInt(1, 32);
+				}
+				else if(month == 2){
+					day = rand.nextInt(1, 29);
+				}
+				else {
+					day = rand.nextInt(1, 31);
+				}
+				LocalDate appDate = LocalDate.of(year, month, day);
+				Date date = Date.valueOf(appDate);
+				String u = "update applications set application_date=? where id=?";
+				pstmt = con.prepareStatement(u);
+				pstmt.setDate(1, date);
+				pstmt.setInt(2, id);
+				if(pstmt.executeUpdate() == 1) {
+					System.out.println("Application " + id + " application date updated");
+					appsUpdated++;
+				}
+				else {
+					System.out.println("Application " + id + " application date did not update.");
+				}
+			}
+			System.out.println(appsUpdated + "applications out of " + totalApps + " updated");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

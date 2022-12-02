@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.ncs.model.Acad;
+import com.ncs.model.JobApplication;
 import com.ncs.model.JobSeeker;
 
 /**
@@ -53,10 +54,12 @@ public class AddCredentials extends HttpServlet {
 		sess.setAttribute("logged-in-job-seeker", js);
 		if(js.updateCredentials(acads, workExps, awards, sess)) {
 			sess.setAttribute("outcome", "Credentials saved.");
+			sess.setAttribute("success-failure", "success");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
 		}
 		else {
 			sess.setAttribute("outcome", "Credentials update failed.");
+			sess.setAttribute("success-failure", "failure");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
 		}
 		String pageFlow = (String) sess.getAttribute("flow");
@@ -64,6 +67,9 @@ public class AddCredentials extends HttpServlet {
 		if(pageFlow != null && pageFlow.equals("job-application-flow")){
 			redirectUrl = "/job-portal/seeker/jobSeekerDashboard.jsp?currentView=apply-job";
 		} else if (pageFlow != null && pageFlow.equals("job-application-edit-flow")){
+			JobApplication app = (JobApplication) sess.getAttribute("app-to-edit");
+			app.updateCredentials(js);
+			sess.setAttribute("app-to-edit", app);
 			redirectUrl = "/job-portal/seeker/jobSeekerDashboard.jsp?currentView=edit-job-application";
 		}
 		resp.sendRedirect(redirectUrl);

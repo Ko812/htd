@@ -24,6 +24,7 @@
 			<input type="password" name="newPassword" class="form-control"
 				placeholder="New password" id="floatingNewPassword"> 
 		</div>
+		<small id="password-req-message" style="display:none; color:red;">Must be at least 8 characters long, contain <br>at least 1 numeric digit, 1 capital letter and 1 small <br>letter and 1 special character.</small>
 		<div class="form-group emp-form-row-style">
 			<label for="floatingCfmPassword" class="form-label">Confirm password</label>
 			<input type="password" name="cfmPassword" class="form-control"
@@ -48,9 +49,19 @@
 			</div>
 		</div>
 	</form>
+	<script src="../validation.js"></script>
 	<script>
 		const back = ()=>{
 			history.back();
 		}
+		const pwdEl = document.getElementById("floatingNewPassword");
+		const invalidPasswordMessage = document.getElementById("password-req-message");
+		pwdEl.addEventListener("keyup", (event) => {
+			if(!validPasswordWithSpecialChar(event.target.value)){
+				invalidPasswordMessage.style.display = "block";
+				return;
+			}
+			invalidPasswordMessage.style.display = "none";
+		});
 	</script>
 </div>

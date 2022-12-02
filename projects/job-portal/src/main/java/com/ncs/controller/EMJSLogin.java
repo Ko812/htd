@@ -19,12 +19,15 @@ import com.ncs.model.JobSeeker;
 public class EMJSLogin extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession sess = req.getSession(true);
+		HttpSession sess = req.getSession();
 		String loginAs = req.getParameter("loginAs");
 		String userName = req.getParameter("userName");
 		String password = req.getParameter("password");
 		String jobIDStr = req.getParameter("jobIDStr");
-	
+		if(jobIDStr == null) {
+			jobIDStr = (String) sess.getAttribute("jobIDStr");
+		}
+		sess = req.getSession(true);
 		if(loginAs.equals("employer")) {
 			EmployerCompany ec = EmployerCompany.login(userName, password, sess);
 			if(ec != null) {
@@ -40,10 +43,12 @@ public class EMJSLogin extends HttpServlet {
 		else if (loginAs.equals("jobSeeker")) {
 			JobSeeker js = JobSeeker.login(userName, password, sess);
 			if(js != null) {
+				sess.setAttribute("applications", js.pullJobsApplied());
 				sess.setAttribute("logged-in-job-seeker", js);
 				if(jobIDStr != null && !jobIDStr.equals("null")) {
 					Job job = js.loadJob(Integer.parseInt(jobIDStr));
 					sess.setAttribute("job-to-apply", job);
+					sess.setAttribute("flow", "job-application-flow");
 					resp.sendRedirect("/job-portal/seeker/jobSeekerDashboard.jsp?currentView=apply-job");
 					return;
 				}

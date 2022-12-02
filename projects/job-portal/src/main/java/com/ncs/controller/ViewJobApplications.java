@@ -64,10 +64,13 @@ public class ViewJobApplications extends HttpServlet {
 		List<JobApplication> filteredApps;
 		if(viewBy.equals("search")) {
 			String searchJobApplications = req.getParameter("searchJobApplications");
-			System.out.println("SEarch text "+ searchJobApplications);
 			filteredApps = su.searchJobApplicationsInList(searchJobApplications, ec.getAllApplications());
 			sess.setAttribute("filtered-apps", filteredApps);
 			sess.setAttribute("search-field", searchJobApplications);
+			if((String) sess.getAttribute("sortOption") != null) {
+				resp.sendRedirect("/job-portal/EMSortApplications");
+				return;
+			}
 			resp.sendRedirect("/job-portal/employer/employerDashboard.jsp?currentView=view-applications");
 			return;
 		}
@@ -75,21 +78,29 @@ public class ViewJobApplications extends HttpServlet {
 			sess.setAttribute("search-field", "");
 		}
 		if(jobID == 9999) {
-			System.out.println("Loading all job applications.");
 			apps = ec.getAllApplications();
+			sess.setAttribute("all-applications", apps);
 			sess.setAttribute("filtered-apps" , filter(filterRole, filterDatePosted, filterByMeetExpRqmt, apps));
+			if((String) sess.getAttribute("sortOption") != null) {
+				resp.sendRedirect("/job-portal/EMSortApplications");
+				return;
+			}
 			resp.sendRedirect("/job-portal/employer/employerDashboard.jsp?currentView=view-applications");
 		}
 		else if(jobID >= 10000) {
-			System.out.println("Loading applications of "+jobID);
 			apps = ec.getJobApplications(jobID);
 			sess.setAttribute("filtered-apps" , apps);
+			if((String) sess.getAttribute("sortOption") != null) {
+				resp.sendRedirect("/job-portal/EMSortApplications");
+				return;
+			}
 			resp.sendRedirect("/job-portal/employer/employerDashboard.jsp?currentView=view-applications");
 		}
 		else {
 			System.out.println("Invalid job id.");
 			sess.setAttribute("outcome" , "Invalid job id");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "failure");
 			resp.sendRedirect("/job-portal/employer/employerDashboard.jsp");
 		}
 	}

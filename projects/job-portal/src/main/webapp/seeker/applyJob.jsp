@@ -30,6 +30,9 @@
 		companyName = jobToApply.getCompany_name();
 		role = jobToApply.getRole();
 		desc = jobToApply.getDesc();
+		
+		desc = desc.replace("\n", "<br>");
+		
 		salary = jobToApply.getSalary();
 		yearsOfExpRq = jobToApply.getYears_of_exp();
 		companyEmail = jobToApply.getCompany_email();

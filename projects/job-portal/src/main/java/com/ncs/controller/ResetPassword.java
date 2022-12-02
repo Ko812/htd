@@ -18,21 +18,18 @@ public class ResetPassword extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession sess = req.getSession();
-		String loginAs = (String) sess.getAttribute("loginAs");
-		String email = (String) sess.getAttribute("reset-for-email");
+		String loginAs = req.getParameter("loginAs");
+		String email = req.getParameter("email");
 		String newPassword = req.getParameter("newPassword");
 		String cfmPassword = req.getParameter("cfmPassword");
 		String sessionCode = req.getParameter("sessionCode");
-		
 		if(newPassword.equals(cfmPassword)) {
-			int out = (new DBOps()).resetPassword(cfmPassword, loginAs, email, sessionCode);
-			if(out == 1) {
-				sess.setAttribute("login-form-message", "Password change success! Login to continue.");
+			if((new DBOps()).resetPassword(cfmPassword, loginAs, email, sessionCode, sess)) {
+				sess.setAttribute("login-form-message", "Password reset success! Log in to continue.");
 				sess.setAttribute("form-message-read", Boolean.parseBoolean("false"));
 			}
 			else {
-				sess.setAttribute("login-form-message", "Password change failed. Try again later.");
-				sess.setAttribute("form-message-read", Boolean.parseBoolean("false"));
+				
 			}
 			resp.sendRedirect("/job-portal/login.jsp");
 		}

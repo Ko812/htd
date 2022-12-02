@@ -35,7 +35,7 @@ public class SendResetPasswordEmail extends HttpServlet {
 		}
 		else {
 			String sc = Encryption.generateSessionCode();
-			if(db.saveSessionCode(sc, email) && EmailUtility.emailWithPassword(email, sc)) {
+			if(db.saveSessionCode(sc, email) && EmailUtility.emailWithPassword(email, sc, loginAs)) {
 				sess.setAttribute("sessionCode", sc);
 				sess.setAttribute("login-form-message", "Reset password email sent!");
 				sess.setAttribute("form-message-read", Boolean.parseBoolean("false"));

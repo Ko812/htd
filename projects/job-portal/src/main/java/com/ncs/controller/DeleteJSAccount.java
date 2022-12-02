@@ -23,13 +23,15 @@ public class DeleteJSAccount extends HttpServlet {
 		JobSeeker js = (JobSeeker) sess.getAttribute("logged-in-job-seeker");
 		
 		if(js.delete()) {
-			sess.setAttribute("outcome", "Account deleted");
+			sess.setAttribute("outcome", "Account deleted successfully.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "success");
 			resp.sendRedirect("/job-portal/EMLogout");
 		}
 		else {
 			sess.setAttribute("outcome", "Account delete failed. Try again later.");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "failure");
 			resp.sendRedirect("/job-portal/seeker/jobSeekerDashboard.jsp");
 		}
 	}

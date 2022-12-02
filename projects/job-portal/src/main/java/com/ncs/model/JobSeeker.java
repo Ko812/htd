@@ -16,11 +16,13 @@ public class JobSeeker {
 	private List<Acad> acadDetails;
 	private List<String> workExp;
 	private List<String> awards;
-	
 
 	private int yearsOfExperience;
 	private String contact;
 	private String email;
+	
+	private int numberOfJobsApplied;
+	
 	public DBOps db;
 	
 	public JobSeeker(String firstName, String lastName, String userName, String nRIC, String contact, String email) {
@@ -116,6 +118,24 @@ public class JobSeeker {
 		awards.add(awd);
 	}
 	
+	public void removeWork(int ind) {
+		if(workExp != null && !workExp.isEmpty() && workExp.size() - 1 >= ind) {
+			workExp.remove(ind);
+		}
+	}
+	
+	public void removeAcad(int ind) {
+		if(acadDetails != null && !acadDetails.isEmpty() && acadDetails.size() - 1 >= ind) {
+			acadDetails.remove(ind);
+		}
+	}
+	
+	public void removeAward(int ind) {
+		if(awards != null && !awards.isEmpty() && awards.size() - 1 >= ind) {
+			awards.remove(ind);
+		}
+	}
+	
 	public boolean applyJob(Job job, HttpSession sess) {
 		return db.applyJob(this, job, sess);
 	}
@@ -125,7 +145,13 @@ public class JobSeeker {
 	}
 	
 	public List<JobApplication> pullJobsApplied(){
-		return db.pullJSJobsApplied(this.id);
+		List<JobApplication> apps = db.pullJSJobsApplied(this.id);
+		this.setNumberOfJobsApplied(apps.size());
+		return apps;
+	}
+	
+	public boolean editJobApplication(JobApplication app, HttpSession sess) {
+		return db.editJobApplication(app, sess);
 	}
 	
 	public boolean updateApplicationStatus(int appID, String updateStatus) {
@@ -136,8 +162,8 @@ public class JobSeeker {
 		return db.acceptJobOffer(appID);
 	}
 	
-	public boolean deleteJobApplication(int appID) {
-		return db.deleteJobApplication(appID);
+	public boolean cancelJobApplication(int appID) {
+		return db.cancelJobApplication(appID);
 	}
 	
 	/**************************************
@@ -233,6 +259,16 @@ public class JobSeeker {
 		this.awards = awards;
 	}
 	
+	
+	
+	public int getNumberOfJobsApplied() {
+		return numberOfJobsApplied;
+	}
+
+	public void setNumberOfJobsApplied(int numberOfJobsApplied) {
+		this.numberOfJobsApplied = numberOfJobsApplied;
+	}
+
 	@Override
 	public String toString() {
 		return "JobSeeker [id=" + id + ", firstName=" + firstName + "]";

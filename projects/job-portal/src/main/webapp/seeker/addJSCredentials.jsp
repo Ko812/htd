@@ -21,10 +21,13 @@
 	if(js.getAwards() != null){
 		awards = js.getAwards();
 	}
+	String flow = request.getParameter("flow");
+	if(flow != null && flow.equals("null")){
+		session.setAttribute("flow", null);
+	}
 	
 %>
 <div class="emp-main-content form-vertical-overflow-auto">
-	
 	<table>
 		<tr>
 			<th>Name</th>
@@ -46,8 +49,8 @@
 		action="/job-portal/AddCredentials">
 		<div class="form-title">Add Personal Credentials</div>
 		
-		<div class="form-group emp-form-row-style">
-			<label for="floatingYearsOfExp" class="form-label">Years of Experience</label>
+		<div class="form-group cred-form-row">
+			<label for="floatingYearsOfExp" class="cred-form-label">Years of Experience</label>
 			<input type="number" name="yearsOfExp" class="form-control"
 				placeholder="Years of Experience" id="floatingYearsOfExp" min=0
 				value="<%=yearsOfExp%>">
@@ -64,10 +67,9 @@
 			for(int i=1;i<=acads.size();i++){
 				Acad acad = acads.get(i-1);
 				%>
-		<div class="form-group emp-form-row-style">
-			<label for="floatingAcademic<%=i%>" class="form-label">Academic Credential <%=i%></label> 
+		<div class="form-group cred-form-row" id="acad-<%=i%>">
+			<label for="floatingAcademic<%=i%>" class="cred-form-label">Academic Credential <%=i%></label> 
 			<select name="acad<%=i%>" class="form-control" id="floatingAcademic<%=i%>">
-				
 				<option value="AdvancedCertification" <%=acad==Acad.AdvancedCertification?"selected":""%>>Advanced Certification</option>
 				<option value="Bachelor" <%=acad==Acad.Bachelor?"selected":""%>>Bachelor</option>
 				<option value="Diploma" <%=acad==Acad.Diploma?"selected":""%>>Diploma</option>
@@ -75,14 +77,19 @@
 				<option value="Master" <%=acad==Acad.Master?"selected":""%>>Master</option>
 				<option value="ProfessionalCertification" <%=acad==Acad.ProfessionalCertification?"selected":""%>>Professional Certification</option>
 			</select>
+			<button class="remove-cred-button" type="button" onclick="removeAcad('<%=i%>')">
+				<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        			<use xlink:href="/job-portal/resources/fa/solid.svg#square-xmark"></use>
+      			</svg>
+      		</button>
 		</div>
 		<%
 			}
 			if(acads.size() < 5){
 				int nextI = acads.size() + 1;
 		%>
-		<div class="form-group emp-form-row-style">
-			<label for="floatingAcademic<%=nextI%>" class="form-label">Academic Credential <%=nextI%></label> 
+		<div class="form-group cred-form-row" id="acad-<%=nextI%>">
+			<label for="floatingAcademic<%=nextI%>" class="cred-form-label">Academic Credential <%=nextI%></label> 
 			<select name="acad<%=nextI%>" class="form-control" id="floatingAcademic<%=nextI%>">
 				<option value="" selected></option>
 				<option value="AdvancedCertification">Advanced Certification</option>
@@ -92,6 +99,11 @@
 				<option value="Master">Master</option>
 				<option value="ProfessionalCertification">Professional Certification</option>
 			</select>
+			<button class="remove-cred-button" type="button" onclick="removeAcad('<%=nextI%>')">
+				<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        			<use xlink:href="/job-portal/resources/fa/solid.svg#square-xmark"></use>
+      			</svg>
+      		</button>
 		</div>
 		</div>
 		<%
@@ -108,47 +120,69 @@
 			for(int i=1;i<=workExps.size();i++){
 		%>
 		
-		<div class="form-group emp-form-row-style">
-			<label for="floatingWorkExp<%=i%>" class="form-label">Work Experience <%=i%></label>
-			<textarea name="workExp<%=i%>" class="form-control" placeholder="Work Experience" id="floatingWorkExp<%=i%>"><%=workExps.get(i-1)%></textarea>
+		<div class="form-group work-cred-form-group" id="work-<%=i%>">
+			<div class="work-cred-row">
+				<label for="floatingWorkExp<%=i%>" class="cred-form-label">Work Experience <%=i%></label><button class="remove-work-button" type="button" onclick="removeWork('<%=i%>')">
+					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        				<use xlink:href="/job-portal/resources/fa/solid.svg#square-xmark"></use>
+      				</svg>
+				</button>
+			</div>
+			<textarea maxlength="255" name="workExp<%=i%>" class="form-control" placeholder="Work Experience" id="floatingWorkExp<%=i%>"><%=workExps.get(i-1)%></textarea>
 		</div>
 		<%}
 			if(workExps.size() < 5){
 				int nextJ = workExps.size() + 1;
 		%>
-		<div class="form-group emp-form-row-style">
-			<label for="floatingWorkExp<%=nextJ%>" class="form-label">Work Experience <%=nextJ%></label>
-			<textarea  name="workExp<%=nextJ%>" class="form-control" placeholder="Work Experience" id="floatingWorkExp<%=nextJ%>"></textarea>
+		<div class="form-group work-cred-form-group" id="work-<%=nextJ%>">
+			<div class="work-cred-row">
+				<label for="floatingWorkExp<%=nextJ%>" class="cred-form-label">Work Experience <%=nextJ%></label><button class="remove-work-button" type="button" onclick="removeWork('<%=nextJ%>')">
+					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        				<use xlink:href="/job-portal/resources/fa/solid.svg#square-xmark"></use>
+      				</svg>
+				</button>
+			</div>
+			<textarea maxlength="255" name="workExp<%=nextJ%>" class="form-control" placeholder="Work Experience" id="floatingWorkExp<%=nextJ%>"></textarea>
 		</div>
 		<%}%>
 		</div>
 		
 		<div id="awardFormInputs" class="form-subsection">
-		<div class="form-sub-title-box">
-			<div class="form-sub-title">Awards</div>
-			<button type="button" onclick="addNewAward('<%=awards.size()+2%>')" class="add-cred-button">Add New</button>
-			<div id="maxAwardEntryMessage" style="display:none; color:red">Max. 5 award credentials</div>
-		</div>
+			<div class="form-sub-title-box">
+				<div class="form-sub-title">Awards</div>
+				<button type="button" onclick="addNewAward('<%=awards.size()+2%>')" class="add-cred-button">Add New</button>
+				<div id="maxAwardEntryMessage" style="display:none; color:red">Max. 5 award credentials</div>
+			</div>
 		
 		<%
 			for(int i=1;i<=awards.size();i++){
 		%>
 		
-		<div class="form-group emp-form-row-style">
-			<label for="floatingAward<%=i%>" class="form-label">Award <%=i%></label>
+		<div class="form-group cred-form-row" id="award-<%=i%>">
+			<label for="floatingAward<%=i%>" class="cred-form-label">Award <%=i%></label>
 			<input type="text" name="award<%=i%>" class="form-control"
-				placeholder="Award" id="floatingAward<%=i%>"
+				placeholder="Award" id="floatingAward<%=i%>" maxlength="50"
 				value="<%=awards.get(i-1)%>">
+			<button class="remove-cred-button" type="button" onclick="removeAward(<%=i%>)">
+				<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        			<use xlink:href="/job-portal/resources/fa/solid.svg#square-xmark"></use>
+      			</svg>
+			</button>
 		</div>
 		<%}
 			if(awards.size() < 5){
 				int nextK = awards.size() + 1;
 		%>
-		<div class="form-group emp-form-row-style">
-			<label for="floatingAward<%=nextK%>" class="form-label">Award <%=nextK%></label>
+		<div class="form-group cred-form-row" id="award-<%=nextK%>">
+			<label for="floatingAward<%=nextK%>" class="cred-form-label">Award <%=nextK%></label>
 			<input type="text" name="award<%=nextK%>" class="form-control"
-				placeholder="Award" id="floatingAward<%=nextK%>"
+				placeholder="Award" id="floatingAward<%=nextK%>" maxlength="50"
 				value="">
+			<button class="remove-cred-button" type="button" onclick="removeAward(<%=nextK%>)">
+				<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        			<use xlink:href="/job-portal/resources/fa/solid.svg#square-xmark"></use>
+      			</svg>
+			</button>
 		</div>
 		</div>
 		<%} %>
@@ -173,34 +207,65 @@
 	</form>
 	<br><br><br><br><br><br>
 	<script>
+	
 	const back = () => {
 		history.back();
 	}
+	
+	const renumberLabels = (tag, type) => {
+    	const tagContainer = document.getElementById(tag);
+    	let tagCount = 1;
+    	console.log("children count " + tagContainer.children.length);
+    	for(let child of tagContainer.children){
+    		if(child.getAttribute("class").includes("form-group")){
+    			if(type === "acad" || type === "award"){
+    				let tagLabel = child.children[0];
+        			tagLabel.innerHTML = tagLabel.innerHTML.replace(/[1-5]{1}/g, ""+tagCount);
+        			tagCount++;
+    	    	}
+    			else if(type === "work"){
+    				let workRow = child.children[0];
+    				let tagLabel = workRow.children[0];
+        			tagLabel.innerHTML = tagLabel.innerHTML.replace(/[1-5]{1}/g, ""+tagCount);
+        			tagCount++;
+    	    	}
+    		}
+    		console.log("child class list " + child.getAttribute("class"))
+    	}	
+    }
+	
+	const removeAcad = (acadIndex) => {
+    	location.href = "/job-portal/RemoveCred?cred=acad&ind="+acadIndex;
+    }
+    const removeWork = (workIndex) => {
+    	location.href = "/job-portal/RemoveCred?cred=work&ind="+workIndex;
+    }
+    const removeAward = (awardIndex) => {
+    	location.href = "/job-portal/RemoveCred?cred=award&ind="+awardIndex;
+    }
 	
 	const acadFormInputsEl = document.getElementById("acadFormInputs");
     const workExpFormInputsEl = document.getElementById("workExpFormInputs");
     const awardFormInputsEl = document.getElementById("awardFormInputs");
     const genericEl = document.getElementById("floatingAcademic1");
     const genericWidth = genericEl.style.width;
-    var currentAcadCount = 0;
-    var currentWorkCount = 0;
-    var currentAwardCount = 0;
-    const addNewAcad = function(num){
-    	if(currentAcadCount==0){
-    		currentAcadCount = Number(num);
-    	}else{
-    		num = Math.max(Number(num), currentAcadCount);
-    	}
-    	console.log("adding acad " + num + " " + currentAcadCount);
-    	if(Number(num) < 6){
+    
+    const addNewAcad = function(){
+    	let num = acadFormInputsEl.children.length;
+    	if(num < 6){
     		const newDivEl = document.createElement("div");
-            newDivEl.classList.add(["form-group", "emp-form-row-style"]);
+            newDivEl.classList.add(["form-group", "cred-form-row"]);
             newDivEl.style.minWidth = "300px";
         	newDivEl.style.maxWidth = "700px";
         	newDivEl.style.margin = "8px 0px";
+        	newDivEl.style.display = "flex";
+        	newDivEl.style.flexDirection = "row";
+        	newDivEl.style.justifyContent = "space-between";
+        	newDivEl.style.alignItems = "center";
+        	newDivEl.id = "acad-"+num;
             const newLabelEl = document.createElement("label");
             newLabelEl.for = "acad"+num;
-            newLabelEl.classList.add("form-label");
+            newLabelEl.classList.add("cred-form-label");
             newLabelEl.innerHTML = "Academic Credential " + num;
             const newSelectEl = document.createElement("select");
             newSelectEl.name = "acad"+num;
@@ -235,32 +300,46 @@
             newSelectEl.appendChild(phDOptionEl);
             newSelectEl.appendChild(masterOptionEl);
             newSelectEl.appendChild(professionalCertOptionEl);
+            const removeAcadButton = document.createElement("button");
+            removeAcadButton.classList.add(["remove-cred-button"]);
+            removeAcadButton.type = "button";
+            removeAcadButton.onclick= function(){
+            	acadFormInputsEl.removeChild(document.getElementById("acad-"+num));
+            	renumberLabels("acadFormInputs", "acad");
+            };
+            const removeIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            removeIcon.setAttribute("viewBox", "0 0 24 24");
+            const useResource = document.createElementNS("http://www.w3.org/2000/svg", "use");
+            useResource.setAttribute("href", "/job-portal/resources/fa/solid.svg#square-xmark");
+            useResource.setAttribute("xlink:href", "/job-portal/resources/fa/solid.svg#square-xmark");
+            removeIcon.append(useResource);
+            removeAcadButton.append(removeIcon);
             newDivEl.appendChild(newLabelEl);
             newDivEl.appendChild(newSelectEl);
+            newDivEl.appendChild(removeAcadButton);
             acadFormInputsEl.appendChild(newDivEl);
-            currentAcadCount++;
     	}else {
     		const maxAcadEntryMessageEl = document.getElementById("maxAcadEntryMessage");
     		maxAcadEntryMessageEl.style.display = "block";
     	}
-        
     }
     
-    const addNewWorkExp = (num) => {
-    	if(currentWorkCount==0){
-    		currentWorkCount = Number(num);
-    	}else{
-    		num = Math.max(Number(num), currentWorkCount);
-    	}
-    	if(Number(num) < 6){
+    const addNewWorkExp = () => {
+    	let num = workExpFormInputsEl.children.length;
+    	if(num < 6){
     		const newDivEl = document.createElement("div");
-            newDivEl.classList.add(["form-group", "emp-form-row-style"]);
+            newDivEl.classList.add(["form-group", "work-cred-form-group"]);
             newDivEl.style.minWidth = "300px";
         	newDivEl.style.maxWidth = "700px";
         	newDivEl.style.margin = "8px 0px";
+        	newDivEl.style.display = "flex";
+        	newDivEl.style.flexDirection = "column";
+        	newDivEl.style.justifyContent = "start";
+        	newDivEl.style.alignItems = "start";
+        	newDivEl.id = "work-"+num;
             const newLabelEl = document.createElement("label");
             newLabelEl.for = "floatingWorkExp"+num;
-            newLabelEl.classList.add("form-label");
+            newLabelEl.classList.add("cred-form-label");
             newLabelEl.innerHTML = "Work Experience " + num;
             const newTextAreaEl = document.createElement("textarea");
             newTextAreaEl.name = "workExp"+num;
@@ -268,11 +347,32 @@
             newTextAreaEl.placeholder="Work Experience";
             newTextAreaEl.id="floatingWorkExp"+num;
             newTextAreaEl.maxLength = "255";
-            newDivEl.appendChild(newLabelEl);
-            newDivEl.appendChild(newTextAreaEl);
+            const removeWorkButton = document.createElement("button");
+            removeWorkButton.classList.add(["remove-work-button"]);
+            removeWorkButton.type = "button";
+            removeWorkButton.onclick= function(){
+            	workExpFormInputsEl.removeChild(document.getElementById("work-"+num));
+            	renumberLabels("workExpFormInputs", "work");
+            };
+            const removeIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            removeIcon.setAttribute("viewBox", "0 0 18 18");
+            const useResource = document.createElementNS("http://www.w3.org/2000/svg", "use");
+            useResource.setAttribute("href", "/job-portal/resources/fa/solid.svg#square-xmark");
+            useResource.setAttribute("xlink:href", "/job-portal/resources/fa/solid.svg#square-xmark");
+            removeIcon.append(useResource);
+            removeWorkButton.append(removeIcon);
+            const newWorkRowDivEl = document.createElement("div");
+            newWorkRowDivEl.classList.add(["work-cred-row"]);
+            newWorkRowDivEl.style.marginTop = "8px";
+            newWorkRowDivEl.style.marginBottom = "4px";
+            newWorkRowDivEl.style.display = "flex";
+            newWorkRowDivEl.style.alignItems = "center";
+            newWorkRowDivEl.appendChild(newLabelEl);
+            newWorkRowDivEl.appendChild(removeWorkButton);
             newDivEl.style.width = genericWidth;
+            newDivEl.appendChild(newWorkRowDivEl);
+            newDivEl.appendChild(newTextAreaEl);
             workExpFormInputsEl.appendChild(newDivEl);
-            currentWorkCount++;
     	}else {
     		const maxWorkEntryMessageEl = document.getElementById("maxWorkEntryMessage");
     		maxWorkEntryMessageEl.style.display = "block";
@@ -280,21 +380,22 @@
         
     }
 
-    const addNewAward = (num) => {
-    	if(currentAwardCount==0){
-    		currentAwardCount = Number(num);
-    	}else{
-    		num = Math.max(Number(num), currentAwardCount);
-    	}
+    const addNewAward = () => {
+    	let num = awardFormInputsEl.children.length;
     	if(Number(num) < 6){
     		const newDivEl = document.createElement("div");
-            newDivEl.classList.add(["form-group", "emp-form-row-style"]);
+            newDivEl.classList.add(["form-group", "cred-form-row"]);
             newDivEl.style.minWidth = "300px";
         	newDivEl.style.maxWidth = "700px";
         	newDivEl.style.margin = "8px 0px";
+        	newDivEl.style.display = "flex";
+        	newDivEl.style.flexDirection = "row";
+        	newDivEl.style.justifyContent = "space-between";
+        	newDivEl.style.alignItems = "center";
+        	newDivEl.id="award-"+num;
             const newLabelEl = document.createElement("label");
             newLabelEl.for = "floatingAward"+num;
-            newLabelEl.classList.add("form-label");
+            newLabelEl.classList.add("cred-form-label");
             newLabelEl.innerHTML = "Award " + num;
             const newInputEl = document.createElement("input");
             newInputEl.type = "text";
@@ -303,16 +404,31 @@
             newInputEl.classList.add("form-control");
             newInputEl.placeholder = "Award";
             newInputEl.id = "floatingAward" + num;
+            const removeAwardButton = document.createElement("button");
+            removeAwardButton.classList.add(["remove-cred-button"]);
+            removeAwardButton.type = "button";
+            removeAwardButton.onclick= function(){
+            	awardFormInputsEl.removeChild(document.getElementById("award-"+num));
+            	renumberLabels("awardFormInputs", "award");
+            };
+            const removeIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            removeIcon.setAttribute("viewBox", "0 0 24 24");
+            const useResource = document.createElementNS("http://www.w3.org/2000/svg", "use");
+            useResource.setAttribute("href", "/job-portal/resources/fa/solid.svg#square-xmark");
+            useResource.setAttribute("xlink:href", "/job-portal/resources/fa/solid.svg#square-xmark");
+            removeIcon.append(useResource);
+            removeAwardButton.append(removeIcon);
             newDivEl.appendChild(newLabelEl);
             newDivEl.appendChild(newInputEl);
+            newDivEl.appendChild(removeAwardButton);
             newDivEl.style.width = genericWidth;
             awardFormInputsEl.appendChild(newDivEl);
-            currentAwardCount++;
     	}else {
     		const maxAwardEntryMessageEl = document.getElementById("maxAwardEntryMessage");
     		maxAwardEntryMessageEl.style.display = "block";
     	}
-        
     }
+    
+    
 	</script>
 </div>

@@ -23,6 +23,7 @@ public class PrepareEditJobApplication extends HttpServlet {
 		JobSeeker js = (JobSeeker) sess.getAttribute("logged-in-job-seeker");
 		int appID = Integer.parseInt(req.getParameter("appID"));
 		JobApplication app = null;
+		
 		@SuppressWarnings("unchecked")
 		List<JobApplication> allJobsApplied = (List<JobApplication>) sess.getAttribute("applications");
 		for(JobApplication a : allJobsApplied) {
@@ -39,6 +40,7 @@ public class PrepareEditJobApplication extends HttpServlet {
 		else {
 			sess.setAttribute("outcome", "Error. Application not found");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
+			sess.setAttribute("success-failure", "success");
 			resp.sendRedirect("/job-portal/seeker/jobSeekerDashboard.jsp?currentView=view-jobs-applied");
 		}
 	}

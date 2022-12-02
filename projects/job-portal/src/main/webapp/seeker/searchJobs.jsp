@@ -5,8 +5,12 @@
 		if(currentView == null){
 			currentView = "view-jobs-applied";
 		}
-		@SuppressWarnings("unchecked")
-		List<Job> searchResults = (ArrayList<Job>) session.getAttribute("searchResults");
+		List<Job> jobs;
+		
+		jobs = (ArrayList<Job>) session.getAttribute("searchResults");
+		if(jobs == null){
+			jobs = (List<Job>)session.getAttribute("all-jobs");
+		}
 %>
 <div class="emp-main-content overflow-auto">
 	<div class="js-search-form-container">
@@ -15,7 +19,7 @@
 			<div class="js-search-field-box">
 				<input type="text" class="search-field" name="searchText"
 					placeholder="Search jobs">
-				<button type="submit" class="search-button">&#128269;</button>
+				<button type="submit" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
 			</div>
 			<div class="search-option-box">
 				<div class="form-group">
@@ -43,18 +47,19 @@
 	</div>
 	<div class="js-search-results-box">
 		<% 
-		if(searchResults != null){
+		if(jobs != null){
 			int i = 0;
-			for(Job j : searchResults){
+			for(Job j : jobs){
 				int jobID = j.getId();
 				String role = j.getRole();
 				int salary = j.getSalary();
 				int yearsOfExp = j.getYears_of_exp();
 				String companyName = j.getCompany_name();
+				Date datePosted = j.getDatePosted();
 				i++;
 				int imgCounter = (i % 4)+ 1;
 		%>
-		<div class="job-item">
+		<div class="search-page-job-item">
 			<div class="js-job-item-button">
 				<div class="js-logo-box">
 					<div class="company-logo logo-<%=imgCounter%>"></div>
@@ -78,10 +83,11 @@
 				</div>
 				<div class="js-apply-box">
 					<button type="button" class="job-apply-button"
-						onclick="location.href='/job-portal/PrepareToApplyJob?jobID=<%=j.getId()%>'">
-						Apply
-					</button>
+						onclick="location.href='/job-portal/PrepareToApplyJob?jobID=<%=j.getId()%>'">View</button>
 				</div>
+			</div>
+			<div class="js-job-item-row">
+				<span>Date posted: <%=datePosted.toString()%></span>
 			</div>
 		</div>
 		<%}}%>

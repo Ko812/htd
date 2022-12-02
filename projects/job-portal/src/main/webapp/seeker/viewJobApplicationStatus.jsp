@@ -9,14 +9,14 @@
 		const acceptOffer = (appID)=>{
 			location.href = "/job-portal/AcceptOffer?appID="+appID;
 		}
-		const deleteApplication = (appID)=>{
+		const cancelApplication = (appID)=>{
 			location.href = "/job-portal/JSDeleteApplication?appID="+appID;
 		}
 		const editApplication= (appID)=>{
 			location.href = "/job-portal/PrepareEditJobApplication?appID="+appID;
 		}
 	</script>
-	<div class="form-title">View Jobs Applied</div>
+	<div class="form-title">View Jobs Applications Status</div>
 	<table>
 		<tr>
 			<th>Application ID</th><!-- 1 -->
@@ -43,6 +43,14 @@
 					int yearsOfExp = app.getYearsOfExp();//7
 					Date appDate = app.getApplicationDate();//8
 					ApplicationStatus appStatus = app.getStatus();//9
+					boolean disableEditButton = appStatus == ApplicationStatus.JobConfirmed 
+					|| appStatus == ApplicationStatus.EmployerAccepted 
+					|| appStatus == ApplicationStatus.EmployerDeclined 
+					|| appStatus == ApplicationStatus.JobSeekerAccepted
+					|| appStatus == ApplicationStatus.JobSeekerDeclined
+					|| appStatus == ApplicationStatus.PendingInterview
+					|| appStatus == ApplicationStatus.ApplicationRetracted
+					|| appStatus == ApplicationStatus.JobClosed;
 				%>
 			<tr>
 				<td><%=appID%></td><!--1-->
@@ -53,13 +61,13 @@
 				<td><%=salary%></td><!--6-->
 				<td><%=yearsOfExp%></td><!--7-->
 				<td><%=appDate%></td><!--8-->
-				<td><%=appStatus%></td><!--9-->
+				<td style="font-weight:bold;"><%=appStatus%></td><!--9-->
 				<td><!--10-->
 					<div class="align-column-center">
-					<button type="button" onclick="editApplication('<%=app.getId()%>')"  class="login-button job-application-button">Edit</button>
+					<button type="button" onclick="editApplication('<%=app.getId()%>')"  class="login-button job-application-button" <%=disableEditButton?"disabled":"" %>>Edit</button>
 					<button type="button"
 						onclick="acceptOffer('<%=app.getId()%>')" <%=appStatus==ApplicationStatus.EmployerAccepted?"":"disabled"%> class="login-button job-application-button">Accept offer</button>
-					<button type="button" onclick="deleteApplication('<%=app.getId()%>')" class="login-button job-application-button">Delete</button>
+					<button type="button" onclick="cancelApplication('<%=app.getId()%>')" class="login-button job-application-button" <%=disableEditButton?"disabled":"" %>>Cancel</button>
 					</div>
 				</td>
 			</tr>

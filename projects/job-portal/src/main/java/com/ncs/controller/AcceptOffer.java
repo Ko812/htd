@@ -20,11 +20,13 @@ public class AcceptOffer extends HttpServlet {
 		JobSeeker js = (JobSeeker)sess.getAttribute("logged-in-job-seeker");
 		if(js.acceptJobOffer(appID)) {
 			sess.setAttribute("outcome", "Job accepted!");
+			sess.setAttribute("success-failure", "success");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
 			resp.sendRedirect("/job-portal/ViewJobsApplied");
 		}
 		else {
 			sess.setAttribute("outcome", "Failed to accept job offer.");
+			sess.setAttribute("success-failure", "failure");
 			sess.setAttribute("outcome-read", Boolean.parseBoolean("false"));
 			resp.sendRedirect("/job-portal/seeker/jobSeekerDashboard.jsp?currentView=view-jobs-applied");
 		}

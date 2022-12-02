@@ -16,6 +16,7 @@ import com.ncs.model.JobSeeker;
 public class JSRegister extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession sess = req.getSession();
 		String firstName = req.getParameter("firstName");
 		String lastName = req.getParameter("lastName");
 		String userName = req.getParameter("userName");
@@ -23,14 +24,17 @@ public class JSRegister extends HttpServlet {
 		String email = req.getParameter("email");
 		String NRIC = req.getParameter("NRIC");
 		String contact = req.getParameter("contact");
-		HttpSession sess = req.getSession();
+		String jobIDStr = req.getParameter("jobIDStr");
+		if(jobIDStr == null) {
+			jobIDStr = (String) sess.getAttribute("jobIDStr");
+		}
 		
 		JobSeeker js = new JobSeeker(firstName, lastName, userName, NRIC, contact, email);
 		if(js.register(password, sess)) {
-			resp.sendRedirect("/job-portal/login.jsp");
+			resp.sendRedirect("/job-portal/login.jsp?jobIDStr="+jobIDStr);
 		}
 		else {
-			resp.sendRedirect("/job-portal/seeker/register.jsp");
+			resp.sendRedirect("/job-portal/seeker/register.jsp?jobIDStr="+jobIDStr);
 		}
 	}
 
