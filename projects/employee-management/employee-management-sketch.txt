@@ -1,0 +1,100 @@
+*******************
+Employee/User Table
+*******************
+
+id int (Primary Key) auto increment
+name varchar(50) not null
+user_name varchar(50) not null
+role varchar(50) not null
+department_name varchar(50) not null
+department_code int not null
+created_by varchar(50) not null
+creator_id int not null
+created_date date not null
+
+********************
+Project Table
+********************
+project_code int (Primary Key) UNIQUE auto increment
+project_title varchar(50) not null
+created_by varchar(50) not null
+creator_id int not null
+creation_date date not null
+project_deadline date not null
+
+********************
+Department Table
+********************
+department_code int (Primary key) UNIQUE auto-increment
+department_name varchar(50) not null
+created_by varchar(50) not null
+creator_id int not null
+created_date date not null
+
+********************
+Employee-Projects
+********************
+id int UNIQUE auto-increment
+employee_id int not null
+employee_name varchar(50) not null
+employee_department varchar(50) not null
+project_title varchar(50) not null
+project_code int not null
+
+public class Employee {
+	private int id;
+	private String name;
+	private String departmentName;
+	private int departmentCode;
+	private String role;
+	private String createdBy;
+	private int creatorId;
+	private Date creationDate;
+
+	// Admin role 
+	// Admin can add, view, update and delete developers
+	// Admin can add, view, update and delete departments
+	// Admin cannot add, view, update and delete projects
+	// Admin cannot add, view, update, delete, assign and unassign projects
+	
+	// Manager role
+	// Manager can add, view, update, delete, assign, unassign projects to employees
+	// Manager cannot add, view, update and delete departments
+	// Manager cannot add, view, update and delete developers
+
+	// Developer role
+	// Developer cannot add, view, update and delete developers
+	// Developer cannot add, update and delete departments
+	// Developer cannot add, view, update, delete, assign and unassign projects
+	// Developer can view, update project status.
+	// Developer can view departments
+}
+
+public class Project {
+	private int projectCode;
+	private String projectTitle;
+	private String createdBy;
+	private int creatorId;
+	private Date creationDate;
+	private Date deadline;
+}
+
+public class Department {
+	private int departmentCode;
+	private String departmentName;
+	private String createdBy;
+	private int creatorId;
+	private Date creationDate;
+}
+
+*************************************
+Web application plan and layout
+*************************************
+
+single login page for all employees (developers, managers, admin)
+
+admin dashboard
+manager dashboard
+developer dashboard
+
+
