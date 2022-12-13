@@ -1,0 +1,46 @@
+<div class="route-container center-content">
+    <div class="department-form-container" (keydown.escape)="onEscPressed($event)">
+        <div class="department-form-header">
+            {{formHeader}}
+        </div>
+        <form #addForm="ngForm" (ngSubmit)="submit(addForm)">
+            <table class="department-form-table">
+                <tr class="department-form-table-row">
+                    <td class="department-form-label-cell">
+                        <label class="department-form-label" for="depName">Department Code: </label>
+                    </td>
+                    <td style="vertical-align: center" class="department-input-table-cell">
+                        {{code}}
+                    </td>
+                </tr>
+                <tr class="department-form-table-row">
+                    <td class="department-form-label-cell">
+                        <label class="department-form-label" for="depName">Department Name: </label>
+                    </td>
+                    <td style="vertical-align: center" class="department-input-table-cell">
+                        <input type="text" class="department-form-item department-form-input" ngModel
+                            name="departmentName" [value]="name" (keyup)="onNameKeyup($event)"
+                            [style.outline]="departmentNameOutline">
+                    </td>
+                </tr>
+                <input type="text" [(ngModel)]="creatorName" name="createdBy" style="display:none" id="creatorName">
+                <input type="numeric" name="creatorId" [(ngModel)]="creatorEmployeeId" style="display:none"
+                    id="creatorId">
+            </table>
+
+            <div class="form-message-area">
+                <span id="form-validation-message">
+                    <div>{{ message }}</div>
+                </span>
+            </div>
+            <div class="department-member-form-spacer"></div>
+            <div style="display: flex; justify-content:start">
+                <button class="department-control-btn" type="button" onclick="history.back()">Back</button>
+                <button [disabled]="addForm.invalid" class="department-control-btn"
+                    type="submit">{{submitBtnLabel}}</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+

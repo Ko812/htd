@@ -1,0 +1,154 @@
+.departments-container {
+    display: grid;
+    width: 80rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.department-card {
+    width: 80rem;
+    margin-bottom: 1rem;
+}
+
+.department-card-header {
+    width: 80rem;
+        height: 6rem;
+        padding: 0.8rem 0 0.8rem 1.6rem;
+        border: 1px solid grey;
+        border-radius: 1.2rem;
+        display: grid;
+        grid-template-columns: 3.6rem 20rem 30rem 1fr 3rem 3rem;
+        column-gap: 1.5rem;
+}
+
+.department-details-item {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    font-size: 2rem;
+}
+
+.department-details-label {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.department-details-value {
+    height: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.department-details-spacer {
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+}
+
+.department-profile-icon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+.department-details-control{
+    display: flex;
+    align-items: center;
+}
+
+.department-details-control-btn {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    color: var(--primary-color);
+}
+
+.department-search-container {
+    width: 32rem;
+    height: 3rem;
+    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.department-search-input {
+    width: 100%;
+    height: 2.4rem;
+    position: relative;
+    border-radius: 4px;
+    border: none;
+    outline: 1px solid lightgrey;
+    padding-left: 8px;
+}
+
+.department-search-btn {
+    position: absolute;
+    top: 1.2rem;
+    right: 1rem;
+    color: var(--primary-color-light);
+    font-size: 1.5rem;
+}
+
+.add-department-btn {
+    border: none;
+    width: 13rem;
+    height: 3.2rem;
+    background-color: var(--primary-color-light);
+    border-radius: 4px;
+}
+
+.show-department-btn {
+    border: none;
+    width: 12rem;
+    font-size: 1.4rem;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.department-employees-container {
+    width:70rem;
+    margin-left: 10rem;
+    padding: 2px;
+}
+
+.department-employee-card {
+    width: 68rem;
+    height: 4rem;
+    padding: 4px;
+    display: grid;
+    border-radius: 4px;
+    background-color: var(--primary-color-dark);
+    color: white;
+    grid-template-columns: 20rem 37rem;
+    margin-bottom: 2px;
+}
+
+.department-employee-detail-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+}
+
+.department-employee-detail-label {
+    width: 5rem;
+    font-weight: 200;
+}
+
+.department-employee-detail-value {
+    font-weight: normal;
+}

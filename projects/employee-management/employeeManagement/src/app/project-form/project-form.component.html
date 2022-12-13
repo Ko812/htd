@@ -1,0 +1,70 @@
+<div class="route-container project-form-position">
+    <div class="project-form-container" (keydown.escape)="onEscPressed($event)">
+        <div class="project-form-header">
+            {{formHeader}}
+        </div>
+        <form #createProjectForm="ngForm" (ngSubmit)="submit(createProjectForm)">
+            <table class="project-form-table">
+                <tr class="project-form-table-row">
+                    <td class="project-form-label-cell">
+                        <label class="project-form-label" for="projectTitle">Project Title: </label>
+                    </td>
+                    <td style="vertical-align: center" class="project-input-table-cell">
+                        <input type="text" class="project-form-item project-form-input" ngModel name="projectTitle" [value]="projTitle"
+                            (keyup)="onTitleKeyup($event)" [style.outline]="projectTitleOutline">
+                    </td>
+                </tr>
+
+                <tr class="project-form-table-row">
+                    <td class="project-form-label-cell" style="vertical-align: top;">
+                        <label class="project-form-label" for="allEmployees">Add Project Members: </label>
+                    </td>
+                    <td style="vertical-align: center" class="project-input-table-cell">
+                        <select class="project-form-item form-input" style="outline: 1px solid grey; border:none;" name="employees" [(ngModel)]="projectMembers" multiple>
+                            <option *ngFor="let emp of allEmployees" for="allEmployees">{{emp.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <input type="text" [(ngModel)]="creatorName" name="createdBy" style="display:none" id="creatorName">
+                <input type="numeric" name="creatorId" [(ngModel)]="creatorEmployeeId" style="display:none"
+                    id="creatorId">
+            </table>
+            <br><br>
+            <div class="project-members-header">Project Members</div>
+            <div class="project-members-container">
+                <div class="project-member-card" *ngFor="let mem of projectMembers">
+                    <div class="project-member-detail-box">
+                        <div class="project-member-details-item">
+                            <div class="project-member-details-label">Name:</div>
+                            <div class="project-member-details-value">{{mem}}</div>
+                        </div>
+                        <div class="project-member-details-item">
+                            <div class="project-member-details-label">Role:</div>
+                            <div class="project-member-details-value">{{getRole(mem)}}</div>
+                        </div>
+                        <div class="project-member-details-item">
+                            <div class="project-member-details-label">Department:</div>
+                            <div class="project-member-details-value">{{getDepartment(mem)}}</div>
+                        </div>
+                    </div>
+                    <button type="button" (click)="removeEmployee(mem.id, mem.name)" class="project-member-details-control-btn">
+                        <i class="fa-solid fa-square-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-message-area">
+                <span id="form-validation-message">
+                    <div>{{ message }}</div>
+                </span>
+            </div>
+            <div class="project-member-form-spacer"></div>
+            <div style="display: flex; justify-content:start">
+                <button class="project-control-btn" type="button" onclick="history.back()">Back</button>
+                <button [disabled]="createProjectForm.invalid" class="project-control-btn" type="submit">{{submitBtnLabel}}</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+

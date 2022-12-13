@@ -1,0 +1,47 @@
+<script src="https://kit.fontawesome.com/b5b7b3504f.js" crossorigin="anonymous"></script>
+<div class="route-container">
+    <div class="route-header">
+        <div class="project-tab-header">Projects</div>
+        <div class="project-search-container">
+            <input type="search" placeholder="Search projects by name" class="project-search-input">
+            <div class="project-search-btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+        </div>
+        <div class="add-project">
+            <button type="button" (click)="goToProjectForm()" class="add-project-btn"><i
+                    class="fa-solid fa-square-plus"></i> Create Project</button>
+        </div>
+    </div>
+    <div class="projects-container">
+        <div class="project-card" *ngFor="let proj of projects">
+            <div class="project-profile-icon">
+                <i class="fa-solid fa-rocket"></i>
+            </div>
+            <div class="project-details-item">
+                <div class="project-details-label">Project Code:</div>
+                <div class="project-details-value">{{proj.projectCode}}</div>
+            </div>
+            <div class="project-details-item">
+                <div class="project-details-label">Project Title:</div>
+                <div class="project-details-value">{{proj.projectTitle}}</div>
+            </div>
+            <div class="project-control-area">
+                <div class="spacer"></div>
+                <div class="project-details-control">
+                    <button type="button" (click)="editProject(proj.projectCode)" class="project-details-control-btn">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                </div>
+                <div class="project-details-control">
+                    <button type="button" (click)="deleteProject(proj.projectCode, proj.projectTitle)"
+                        class="project-details-control-btn">
+                        <i class="fa-solid fa-square-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

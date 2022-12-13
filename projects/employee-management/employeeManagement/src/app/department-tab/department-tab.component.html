@@ -1,0 +1,62 @@
+<script src="https://kit.fontawesome.com/b5b7b3504f.js" crossorigin="anonymous"></script>
+<div class="route-container">
+    <div class="route-header">
+        <div class="department-tab-header">Departments</div>
+        <div class="department-search-container">
+            <input type="search" placeholder="Search department by name" class="department-search-input">
+            <div class="department-search-btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+        </div>
+        <div class="add-department">
+            <button type="button" (click)="goToDepartmentForm()" class="add-department-btn"><i
+                    class="fa-solid fa-square-plus"></i> Add Department</button>
+        </div>
+    </div>
+    <div class="departments-container">
+        <div class="department-card" *ngFor="let dpm of departments">
+            <div class="department-card-header">
+                <div class="department-profile-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="department-details-item">
+                    <div class="department-details-label">Department Code:</div>
+                    <div class="department-value">{{dpm.departmentCode}}</div>
+                </div>
+                <div class="department-details-item">
+                    <div class="department-details-label">Name:</div>
+                    <div class="department-details-value">{{dpm.departmentName}}</div>
+                </div>
+
+                <div class="department-details-spacer">
+                    <button type="button" (click)="showDepartmentEmployees(dpm.departmentCode)" class="show-department-btn">View Employees</button>
+                </div>
+                <div class="department-details-control">
+                    <button type="button" (click)="editDepartment(dpm)" class="department-details-control-btn">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                </div>
+                <div class="department-details-control">
+                    <button type="button" (click)="deleteDepartment(dpm.departmentCode, dpm.departmentName)"
+                        class="department-details-control-btn">
+                        <i class="fa-solid fa-square-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="department-employees-container" *ngIf="currentShowingDepartment.includes(dpm.departmentCode)">
+                <div class="department-employee-card" *ngFor="let e of dpm.employees">
+                    <div class="department-employee-detail-item">
+                        <div class="department-employee-detail-label">Name:</div>
+                        <div class="department-employee-detail-value">{{e.name}}</div>
+                    </div>
+                    <div class="department-employee-detail-item">
+                        <div class="department-employee-detail-label">Role:</div>
+                        <div class="department-employee-detail-value">{{e.role}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

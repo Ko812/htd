@@ -1,0 +1,62 @@
+/* You can add global styles to this file, and also import other style files */
+@charset "UTF-8";
+
+:root{
+    --primary-color: slateblue;
+    --primary-color-light: rgb(161, 148, 245);
+    --primary-color-dark: rgb(73, 58, 168);
+    --secondary-color: rgb(231, 199, 14);
+    --secondary-color-light: rgb(255, 227, 67);
+    --secondary-color-dark: rgb(192, 163, 0);
+
+}
+
+*,
+*::before,
+*::after {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: inherit;
+}
+
+html {
+    font-size: 62.5%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: normal;
+}
+
+body {
+    box-sizing: border-box;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: var(--primary-color-light);
+    color: white;
+}
+
+.route-container {
+    width: 100%;
+    padding: 20px 50px 10px 50px;
+    min-height: 800px;
+    overflow: auto;
+    font-size: 16px;
+}
+
+.route-header {
+    height: 8rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 200px 1fr 120px;
+
+    font-size: 32px;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

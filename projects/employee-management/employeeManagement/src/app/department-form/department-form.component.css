@@ -1,0 +1,112 @@
+.department-form-header {
+    width: 30rem;
+    font-size: 2.6rem;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    margin-bottom: 2rem;
+}
+
+.department-form-container {
+    width: 46rem;
+    height: 35rem;
+}
+
+.department-form-label-cell {
+    width: 16rem;
+    vertical-align: center;
+}
+
+.department-form-item {
+    width: 20rem;
+}
+
+.department-form-table-row {
+    height: 40px;
+}
+
+.department-form-input {
+    border-radius: 4px;
+    height: 20px;
+    padding-left: 4px;
+    border: none;
+}
+
+.department-form-label {
+    width: 8rem;
+}
+
+.department-control-btn {
+    width: 6rem;
+    height: 2.4rem;
+    margin-left: 8px;
+    margin-right: 8px;
+    border: none;
+    outline: none;
+    background-color: slateblue;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.department-member-form-spacer {
+    height: 5rem;
+}
+
+
+.department-members-container {
+    display: grid;
+    grid-template-columns: repeat(4, 250px);
+    gap: 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.department-member-card {
+    width: 250px;
+    height: 280px;
+    padding: 18px;
+    border: 1px solid grey;
+    border-radius: 25px;
+    display: grid;
+}
+
+.department-member-details-item {
+    display: flex;
+    align-items: start;
+    font-size: 14px;
+}
+
+.department-member-details-label {
+    width: 100px;
+
+}
+
+.department-member-details-value {
+    text-align: left;
+
+}
+
+.department-member-profile-icon {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    color: darkgray;
+}
+
+.department-member-control-area {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 40px 40px;
+}
+
+.department-member-details-control-btn {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary-color);
+}

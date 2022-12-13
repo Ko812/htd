@@ -1,0 +1,52 @@
+<div class="route-container center-content">
+    <div class="form-container" (keydown.escape)="onEscPressed($event)">
+        <div class="form-header">
+            {{formHeader}}
+        </div>
+        <form #addForm="ngForm" (ngSubmit)="submit(addForm)" id="employee-form">
+            <table class="form-table" id="employee-form-table">
+                <tr class="form-table-row">
+                    <td  class="form-label-cell">
+                        <label class="form-label" for="employeeName">Name: </label>
+                    </td>
+                    <td style="vertical-align: center" class="input-table-cell">
+                        <input type="text" class="form-item form-input" ngModel name="name" [value]="employeeName"
+                            (keyup)="onNameKeyup($event)" [style.outline]="employeeNameOutline">
+                    </td>
+                </tr>
+
+                <tr class="form-table-row">
+                    <td class="form-label-cell">
+                        <label class="form-label" for="employeeRole">Role: </label>
+                    </td>
+                    <td style="vertical-align: center" class="input-table-cell">
+                        <input type="text" class="form-item form-input" ngModel name="role" [value]="employeeRole"
+                            (keyup)="onRoleKeyup($event)" [style.outline]="employeeRoleOutline">
+                    </td>
+                </tr>
+                <tr class="form-table-row">
+                    <td class="form-label-cell">
+                        <label class="form-label" for="department">Department: </label>
+                    </td>
+                    <td style="vertical-align: center" class="input-table-cell">
+                        <select class="form-item form-select" [style.outline]="employeeDeptOutline" [(ngModel)]="employeeDept" name="department" id="employeeDeptSelector">
+                            <option class="dept-select-options" *ngFor="let deptId of departmentIds" for="department">{{deptId}} - {{departmentMap.get(deptId)}}</option>
+                        </select>
+                    </td>
+                </tr>
+
+            </table>
+            <div class="form-message-area">
+                <span id="form-validation-message">
+                    <div>{{ message }}</div>
+                </span>
+            </div>
+            <div class="employee-form-spacer"></div>
+            <div style="display: flex; justify-content:start">
+                <button class="control-btn" type="button" onclick="history.back()">Back</button>
+                <button [disabled]="addForm.invalid" class="control-btn" type="submit" >{{submitBtnLabel}}</button>
+            </div>
+
+        </form>
+    </div>
+</div>
