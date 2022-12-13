@@ -1,0 +1,84 @@
+// Department data
+{
+    "departmentName": "Applications",
+    "departmentCode": 201
+}
+{
+    "departmentName": "Infrastructure",
+    "departmentCode": 202
+}
+{
+    "departmentName": "Cyber",
+    "departmentCode": 203
+}
+{
+    "departmentName": "Engineering",
+    "departmentCode": 204
+}
+{
+    "departmentName": "Admin",
+    "departmentCode": 205
+}
+{
+    "departmentName": "Management",
+    "departmentCode": 206
+}
+
+
+// Employee data
+
+ {
+    "name": "Gerald Wheeler",
+    "role": "Developer",
+    "department": {
+            "departmentName": "Applications",
+            "departmentCode": 201
+        },
+    "project": null,
+    "createdBy": "Aaron Koh",
+    "creatorId": 123
+ }
+ {
+      "name": "Tony Miller",
+      "role": "Network Admin",
+      "department": {
+          "departmentName": "Infrastructure",
+          "departmentCode": 202
+          },
+      "project": null,
+      "createdBy": "Aaron Koh",
+      "creatorId": 123
+ }
+ {
+     "name": "Eli Steward",
+     "role": "Cybersecurity Engineer",
+     "department": {
+          "departmentName": "Cyber",
+          "departmentCode": 203
+          },
+     "project": null,
+     "createdBy": "Aaron Koh",
+     "creatorId": 123
+ }
+ {
+     "name": "May Loewe",
+     "role": "Product Engineer",
+     "department": {
+          "departmentName": "Engineering",
+          "departmentCode": 204
+          },
+     "project": null,
+     "createdBy": "Aaron Koh",
+     "creatorId": 123
+ }
+ {
+      "name": "Tessa Singer",
+      "role": "Test Engineer",
+      "department": {
+           "departmentCode": 204
+           },
+      "project": null,
+      "createdBy": "Aaron Koh",
+      "creatorId": 123
+  }
+
